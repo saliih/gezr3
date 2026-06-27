@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la /home/chtioui/)",
+      "Bash(xargs grep -l \"client_vannes\\\\|vannes\\\\|Vanne\")",
+      "Bash(find //wsl.localhost/ubuntu-24.04/home/chtioui/gezr3/resources/views -type d -name \"*activation*\" -o -type d -name \"*solde*\")",
+      "Bash(find //wsl.localhost/ubuntu-24.04/home/chtioui/gezr3/resources/views -type f -name \"*.blade.php\" | grep -E \"\\(prix|activation\\)\" | sort)",
+      "Bash(find \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\" -type f -name \"*.php\" -path \"*/app/Models/*\")",
+      "Bash(find \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\" -type f -path \"*/database/migrations/*.php\")",
+      "Bash(ls -la \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\")",
+      "Bash(find \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3/resources/views\" -name \"*.blade.php\" -type f)",
+      "Bash(grep -r \"select2\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\resources\" --include=\"*.php\" --include=\"*.blade.php\" -l)",
+      "Bash(grep -n \"select2\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\resources\\\\views\\\\layouts\\\\app.blade.php\")",
+      "Bash(grep -n \"jquery\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\resources\\\\views\\\\layouts\\\\app.blade.php\" -i)",
+      "Bash(grep -n \"reminder\\\\|amount\\\\|prix_m3\\\\|PrixM3\\\\|unit_price\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\resources\\\\views\\\\soldes\\\\_form.blade.php\")",
+      "Bash(grep -rn \"reminder\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\app\" --include=\"*.php\")",
+      "Bash(grep -n \"data-date\" \"\\\\\\\\wsl.localhost\\\\ubuntu-24.04\\\\home\\\\chtioui\\\\gezr3\\\\resources\\\\views\\\\planning\\\\create.blade.php\")"
+    ]
+  }
+}

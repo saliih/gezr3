@@ -1,0 +1,219 @@
+@extends('layouts.app')
+@section('title', 'تفعيل جديد')
+@section('page-title', 'تفعيل جديد')
+
+@section('content')
+<div class="row justify-content-center">
+<div class="col-lg-8">
+
+@if($errors->any())
+<div class="alert alert-danger mb-3">
+    <ul class="mb-0">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+</div>
+@endif
+
+<form method="POST" action="{{ route('nouvelle-activation.store') }}" id="activationForm">
+@csrf
+
+<div class="card mb-3">
+    <div class="card-header"><h5><i class="bi bi-toggle-on me-2"></i>بيانات التفعيل - {{ $year }}</h5></div>
+    <div class="card-body">
+        <div class="row g-3">
+
+            {{-- Client --}}
+            <div class="col-md-8">
+                <label class="form-label fw-semibold">العميل <span class="text-danger">*</span></label>
+                <select name="client_id" id="client_id" class="form-select" required>
+                    <option value="">-- اختر عميل --</option>
+                    @foreach($clients as $c)
+                        <option value="{{ $c->id }}" {{ old('client_id') == $c->id ? 'selected' : '' }}>
+                            {{ $c }}
+                        </option>
+                    @endforeach
+                </select>
+                <div id="already-active-warn" class="text-warning mt-1 small d-none">
+                    <i class="bi bi-exclamation-triangle-fill"></i> هذا العميل مفعّل مسبقاً لسنة {{ $year }}
+                </div>
+            </div>
+
+            {{-- Date --}}
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">تاريخ العملية</label>
+                <input type="date" name="date_transfert" class="form-control"
+                       value="{{ old('date_transfert', date('Y-m-d')) }}">
+            </div>
+
+            {{-- Transfer / coupon --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">رقم التحويل</label>
+                <input type="text" name="transfert_number" class="form-control"
+                       value="{{ old('transfert_number') }}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">رقم القسيمة</label>
+                <input type="text" name="coupon_number" class="form-control" maxlength="10"
+                       value="{{ old('coupon_number') }}">
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Financial breakdown --}}
+<div class="card mb-3">
+    <div class="card-header"><h5><i class="bi bi-calculator me-2"></i>تفاصيل المبالغ</h5></div>
+    <div class="card-body">
+        <div class="row g-3">
+
+            {{-- Remaining m² from previous year --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">
+                    الرصيد المتبقي من {{ $year - 1 }} (م²)
+                </label>
+                <div class="input-group">
+                    <input type="number" id="remaining_m2" class="form-control bg-light" readonly value="0">
+                    <span class="input-group-text">م²</span>
+                </div>
+            </div>
+
+            {{-- Settlement amount (remaining / prev_price) --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">
+                    مبلغ تسوية {{ $year - 1 }}
+                </label>
+                <div class="input-group">
+                    <input type="number" id="settlement_amount" class="form-control bg-light" readonly value="0.00" step="0.01">
+                    <span class="input-group-text">د.ت</span>
+                </div>
+            </div>
+
+            {{-- Activation fee --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">
+                    رسوم التفعيل {{ $year }}
+                </label>
+                <div class="input-group">
+                    <input type="number" id="activation_fee_display" class="form-control bg-light" readonly value="0.00" step="0.01">
+                    <span class="input-group-text">د.ت</span>
+                </div>
+            </div>
+
+            {{-- Amount (buying m²) --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    المبلغ <span class="text-danger">*</span>
+                    <small class="text-muted fw-normal">(شراء م²)</small>
+                </label>
+                <div class="input-group">
+                    <input type="number" name="amount" id="amount_input" class="form-control"
+                           step="0.01" min="0" required value="{{ old('amount', 0) }}">
+                    <span class="input-group-text">د.ت</span>
+                </div>
+            </div>
+
+            <div class="col-12"><hr class="my-1"></div>
+
+            {{-- Calculated total --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold text-muted">المجموع المحسوب</label>
+                <div class="input-group">
+                    <input type="number" id="calc_total" class="form-control bg-light fw-bold" readonly value="0.00" step="0.01">
+                    <span class="input-group-text">د.ت</span>
+                </div>
+            </div>
+
+            {{-- Manual total to verify --}}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    المجموع المدفوع (للتحقق) <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                    <input type="number" id="manual_total" class="form-control" step="0.01" min="0" value="0">
+                    <span class="input-group-text">د.ت</span>
+                </div>
+                <div id="total-match" class="mt-1 small d-none"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="d-flex gap-2">
+    <button type="submit" id="submitBtn" class="btn btn-primary" disabled>
+        <i class="bi bi-check-lg me-1"></i> تفعيل
+    </button>
+    <a href="{{ route('activations.index') }}" class="btn btn-outline-secondary">إلغاء</a>
+</div>
+
+</form>
+</div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+$(function () {
+    const ajaxUrl = "{{ route('nouvelle-activation.client-data') }}";
+
+    let activationFee = 0;
+    let settlementAmt = 0;
+
+    function recalc() {
+        const amt   = parseFloat($('#amount_input').val()) || 0;
+        const total = settlementAmt + activationFee + amt;
+        $('#calc_total').val(total.toFixed(2));
+        checkTotals();
+    }
+
+    function checkTotals() {
+        const manual = parseFloat($('#manual_total').val()) || 0;
+        const calc   = parseFloat($('#calc_total').val()) || 0;
+        const $match = $('#total-match');
+
+        $match.removeClass('d-none');
+
+        if (Math.abs(manual - calc) < 0.01) {
+            $match.html('<i class="bi bi-check-circle-fill text-success"></i> المجموع متطابق');
+            $('#submitBtn').prop('disabled', false);
+        } else {
+            $match.html(`<i class="bi bi-x-circle-fill text-danger"></i> الفرق: ${(manual - calc).toFixed(2)} د.ت`);
+            $('#submitBtn').prop('disabled', true);
+        }
+
+        if (manual === 0 && calc === 0) {
+            $match.addClass('d-none');
+            $('#submitBtn').prop('disabled', true);
+        }
+    }
+
+    $('#client_id').on('change', function () {
+        const id = $(this).val();
+        if (!id) {
+            $('#remaining_m2').val(0);
+            $('#settlement_amount').val('0.00');
+            $('#activation_fee_display').val('0.00');
+            activationFee = 0;
+            settlementAmt = 0;
+            $('#already-active-warn').addClass('d-none');
+            recalc();
+            return;
+        }
+
+        $.getJSON(ajaxUrl, { client_id: id }, function (data) {
+            $('#remaining_m2').val(data.remaining);
+            $('#settlement_amount').val(parseFloat(data.settlement).toFixed(2));
+            $('#activation_fee_display').val(parseFloat(data.activation_fee).toFixed(2));
+
+            settlementAmt = parseFloat(data.settlement) || 0;
+            activationFee = parseFloat(data.activation_fee) || 0;
+
+            $('#already-active-warn').toggleClass('d-none', !data.is_already_active);
+
+            recalc();
+        });
+    });
+
+    $('#amount_input').on('input', recalc);
+    $('#manual_total').on('input', checkTotals);
+});
+</script>
+@endpush

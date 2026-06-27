@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Tests
+tests
+phpunit.xml
+
+# Dev files
+.env.local
+.env.*.local
+*.test.php
+
+# Docker files (inutiles dans l'image)
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# IDE
+.idea
+.vscode
+*.swp
+
+# Storage (monté en volume)
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# Build assets source (pas nécessaires en prod)
+vite.config.js
+package.json
+package-lock.json
+yarn.lock
+resources/js
+resources/css
