@@ -97,16 +97,15 @@
                 </div>
             </div>
 
-            {{-- Amount (buying m²) --}}
-            <div class="col-md-6">
+            {{-- Amount (buying m²) — repartie par vanne --}}
+            <div class="col-12">
                 <label class="form-label fw-semibold">
                     المبلغ <span class="text-danger">*</span>
-                    <small class="text-muted fw-normal">(شراء م²)</small>
+                    <small class="text-muted fw-normal">(شراء م² - موزع على الفوانات)</small>
                 </label>
-                <div class="input-group">
-                    <input type="number" name="amount" id="amount_input" class="form-control"
-                           step="0.01" min="0" required value="{{ old('amount', 0) }}">
-                    <span class="input-group-text">د.ت</span>
+                <div id="vannes-container" class="row g-2"></div>
+                <div id="no-vannes-warn" class="text-danger mt-1 small d-none">
+                    <i class="bi bi-exclamation-triangle-fill"></i> لا توجد فوانات مرتبطة بهذا العميل
                 </div>
             </div>
 
@@ -157,8 +156,44 @@ $(function () {
     let activationFee = 0;
     let settlementAmt = 0;
 
+    function escapeHtml(str) {
+        return $('<div>').text(str).html();
+    }
+
+    function vannesTotal() {
+        let total = 0;
+        $('#vannes-container input.vanne-amount').each(function () {
+            total += parseFloat($(this).val()) || 0;
+        });
+        return total;
+    }
+
+    function renderVannes(vannes) {
+        const $container = $('#vannes-container');
+        $container.empty();
+
+        $('#no-vannes-warn').toggleClass('d-none', vannes.length > 0);
+        $('#submitBtn').prop('disabled', vannes.length === 0);
+
+        vannes.forEach(function (v) {
+            $container.append(`
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text">${escapeHtml(v.label)}</span>
+                        <input type="number" name="vanne_amount[${v.id}]" class="form-control vanne-amount"
+                               step="0.01" min="0" required value="0">
+                        <span class="input-group-text">د.ت</span>
+                    </div>
+                </div>
+            `);
+        });
+
+        $container.find('input.vanne-amount').on('input', recalc);
+        recalc();
+    }
+
     function recalc() {
-        const amt   = parseFloat($('#amount_input').val()) || 0;
+        const amt   = vannesTotal();
         const total = settlementAmt + activationFee + amt;
         $('#calc_total').val(total.toFixed(2));
         checkTotals();
@@ -168,10 +203,11 @@ $(function () {
         const manual = parseFloat($('#manual_total').val()) || 0;
         const calc   = parseFloat($('#calc_total').val()) || 0;
         const $match = $('#total-match');
+        const hasVannes = $('#vannes-container input.vanne-amount').length > 0;
 
         $match.removeClass('d-none');
 
-        if (Math.abs(manual - calc) < 0.01) {
+        if (hasVannes && Math.abs(manual - calc) < 0.01) {
             $match.html('<i class="bi bi-check-circle-fill text-success"></i> المجموع متطابق');
             $('#submitBtn').prop('disabled', false);
         } else {
@@ -194,7 +230,7 @@ $(function () {
             activationFee = 0;
             settlementAmt = 0;
             $('#already-active-warn').addClass('d-none');
-            recalc();
+            renderVannes([]);
             return;
         }
 
@@ -208,12 +244,12 @@ $(function () {
 
             $('#already-active-warn').toggleClass('d-none', !data.is_already_active);
 
-            recalc();
+            renderVannes(data.vannes || []);
         });
     });
 
-    $('#amount_input').on('input', recalc);
     $('#manual_total').on('input', checkTotals);
+    renderVannes([]);
 });
 </script>
 @endpush

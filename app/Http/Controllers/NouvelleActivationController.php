@@ -51,12 +51,17 @@ class NouvelleActivationController extends Controller
             ->where('year', $year)
             ->exists();
 
+        $vannes = $client->vannes()->get(['vannes.id', 'vannes.reference', 'vannes.link'])
+            ->map(fn ($v) => ['id' => $v->id, 'label' => (string) $v])
+            ->values();
+
         return response()->json([
             'remaining'        => $remaining,
             'prev_price'       => $prevPrice,
             'settlement'       => $settlementAmount,
             'activation_fee'   => $activationFee,
             'is_already_active'=> $isAlreadyActive,
+            'vannes'           => $vannes,
         ]);
     }
 
@@ -67,13 +72,26 @@ class NouvelleActivationController extends Controller
             'date_transfert'    => 'required|date',
             'transfert_number'  => 'nullable|string|max:50',
             'coupon_number'     => 'nullable|string|max:10',
-            'amount'            => 'required|numeric|min:0',
+            'vanne_amount'      => 'required|array|min:1',
+            'vanne_amount.*'    => 'required|numeric|min:0',
         ]);
 
         $year    = (int) date('Y');
         $prevYear = $year - 1;
         $clientId = (int) $data['client_id'];
         $date     = Carbon::parse($data['date_transfert']);
+
+        $client = Client::findOrFail($clientId);
+        $clientVanneIds = $client->vannes()->pluck('vannes.id')->all();
+
+        $vanneAmounts = [];
+        foreach ($data['vanne_amount'] as $vanneId => $amount) {
+            $vanneId = (int) $vanneId;
+            if (!in_array($vanneId, $clientVanneIds, true)) {
+                abort(422, 'Vanne non affectée à ce client.');
+            }
+            $vanneAmounts[$vanneId] = (float) $amount;
+        }
 
         // Remaining balance = reminder of last credit solde of current year for this client
         $lastCredit = Solde::where('client_id', $clientId)
@@ -125,19 +143,23 @@ class NouvelleActivationController extends Controller
             ]);
         }
 
-        // 4. المبلغ → type debit, reminder = amount / prix_m3 current year
+        // 4. المبلغ → reparti par vanne, une ligne de solde par vanne affectée au client
         $currPrice = $currPrix?->price ?? 0;
-        $reminder  = ($currPrice > 0) ? round((float) $data['amount'] / $currPrice, 2) : 0;
 
-        Solde::create([
-            'client_id'        => $clientId,
-            'date_transfert'   => $date,
-            'type'             => 'credit',
-            'amount'           => (float) $data['amount'],
-            'transfert_number' => $data['transfert_number'] ?? null,
-            'coupon_number'    => $data['coupon_number'] ?? null,
-            'reminder'         => $reminder,
-        ]);
+        foreach ($vanneAmounts as $vanneId => $vanneAmount) {
+            $reminder = ($currPrice > 0) ? round($vanneAmount / $currPrice, 2) : 0;
+
+            Solde::create([
+                'client_id'        => $clientId,
+                'vannes_id'        => $vanneId,
+                'date_transfert'   => $date,
+                'type'             => 'credit',
+                'amount'           => $vanneAmount,
+                'transfert_number' => $data['transfert_number'] ?? null,
+                'coupon_number'    => $data['coupon_number'] ?? null,
+                'reminder'         => $reminder,
+            ]);
+        }
 
         return redirect()->route('activations.index')
             ->with('success', 'تم إضافة التفعيل بنجاح.');
