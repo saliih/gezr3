@@ -244,7 +244,7 @@
 
         <div class="nav-section">المعاملات</div>
         <a href="{{ route('paiements.index') }}" class="nav-link {{ request()->routeIs('paiements.*') ? 'active' : '' }}">
-            <i class="bi bi-cash-coin"></i> الدفعات
+            <i class="bi bi-cash-coin"></i> مداخيل
         </a>
         <a href="{{ route('consommation.index') }}" class="nav-link {{ request()->routeIs('consommation.*') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> الاستهلاك

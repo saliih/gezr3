@@ -73,7 +73,7 @@
             </div>
             <div>
                 <div class="stat-value">{{ number_format($totalPaiements, 2) }}</div>
-                <div class="stat-label">إجمالي الدفعات {{ $year }} (د.ت)</div>
+                <div class="stat-label">إجمالي مداخيل {{ $year }} (د.ت)</div>
             </div>
         </div>
     </div>

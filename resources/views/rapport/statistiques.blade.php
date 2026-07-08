@@ -76,7 +76,7 @@
                     <td class="fw-semibold text-end text-primary">{{ number_format($fraisAbonnement, 2) }} د.ت</td>
                 </tr>
                 <tr>
-                    <td>إجمالي الدفعات</td>
+                    <td>إجمالي مداخيل</td>
                     <td class="fw-semibold text-end text-success">{{ number_format($montantCredite, 2) }} د.ت</td>
                 </tr>
                 <tr>

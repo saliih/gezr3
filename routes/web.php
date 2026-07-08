@@ -28,8 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // Soldes (paiements - credit)
     Route::get('paiements', [SoldeController::class, 'index'])->defaults('type', 'credit')->name('paiements.index');
-    Route::get('paiements/create', [SoldeController::class, 'create'])->defaults('type', 'credit')->name('paiements.create');
-    Route::post('paiements', [SoldeController::class, 'store'])->defaults('type', 'credit')->name('paiements.store');
+    Route::get('paiements/create', [SoldeController::class, 'createPaiement'])->name('paiements.create');
+    Route::post('paiements', [SoldeController::class, 'storePaiement'])->name('paiements.store');
+    Route::get('paiements/client-data', [SoldeController::class, 'ajaxClientData'])->name('paiements.client-data');
     Route::get('paiements/{solde}/edit', [SoldeController::class, 'edit'])->name('paiements.edit');
     Route::put('paiements/{solde}', [SoldeController::class, 'update'])->name('paiements.update');
     Route::delete('paiements/{solde}', [SoldeController::class, 'destroy'])->name('paiements.destroy');
