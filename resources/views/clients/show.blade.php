@@ -7,7 +7,7 @@
     <div class="col-lg-4">
         <div class="card mb-3">
             <div class="card-header">
-                <h5><i class="bi bi-person me-2"></i>معلومات العميل</h5>
+                <h5><i class="bi bi-person me-2"></i>معلومات الفلاح</h5>
                 <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-pencil"></i>
                 </a>

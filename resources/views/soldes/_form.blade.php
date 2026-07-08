@@ -16,9 +16,9 @@
 
     <div class="row g-3">
         <div class="col-md-8">
-            <label class="form-label fw-semibold">العميل <span class="text-danger">*</span></label>
+            <label class="form-label fw-semibold">الفلاح <span class="text-danger">*</span></label>
             <select name="client_id" class="form-select" required>
-                <option value="">-- اختر عميل --</option>
+                <option value="">-- اختر فلاح --</option>
                 @foreach($clients as $c)
                     <option value="{{ $c->id }}"
                         {{ old('client_id', $solde?->client_id ?? request('client_id')) == $c->id ? 'selected' : '' }}>

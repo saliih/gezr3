@@ -40,7 +40,7 @@
             </div>
             <div>
                 <div class="stat-value">{{ number_format($totalClients) }}</div>
-                <div class="stat-label">إجمالي العملاء</div>
+                <div class="stat-label">إجمالي الفلاحين</div>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
             </div>
             <div>
                 <div class="stat-value">{{ number_format($activeClients) }}</div>
-                <div class="stat-label">عملاء نشطون {{ $year }}</div>
+                <div class="stat-label">فلاحين نشطون {{ $year }}</div>
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>العميل</th>
+                    <th>الفلاح</th>
                     <th>النوع</th>
                     <th>المبلغ</th>
                     <th>التاريخ</th>

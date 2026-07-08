@@ -236,7 +236,7 @@
 
         <div class="nav-section">الإدارة</div>
         <a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.*') ? 'active' : '' }}">
-            <i class="bi bi-people"></i> العملاء
+            <i class="bi bi-people"></i> الفلاحين
         </a>
         <a href="{{ route('vannes.index') }}" class="nav-link {{ request()->routeIs('vannes.*') ? 'active' : '' }}">
             <i class="bi bi-tools"></i> الصنابير

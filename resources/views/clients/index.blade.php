@@ -1,13 +1,13 @@
 @extends('layouts.app')
-@section('title', 'العملاء')
-@section('page-title', 'العملاء')
+@section('title', 'الفلاحين')
+@section('page-title', 'الفلاحين')
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h5><i class="bi bi-people me-2"></i>قائمة العملاء <span class="badge bg-secondary">{{ $clients->total() }}</span></h5>
+        <h5><i class="bi bi-people me-2"></i>قائمة الفلاحين <span class="badge bg-secondary">{{ $clients->total() }}</span></h5>
         <a href="{{ route('clients.create') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-lg me-1"></i> إضافة عميل
+            <i class="bi bi-plus-lg me-1"></i> إضافة فلاح
         </a>
     </div>
     <div class="card-body pb-0">
@@ -78,7 +78,7 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <form method="POST" action="{{ route('clients.destroy', $client) }}"
-                                  onsubmit="return confirm('حذف العميل؟')">
+                                  onsubmit="return confirm('حذف الفلاح؟')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>
@@ -86,7 +86,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="9" class="text-center text-muted py-4">لا يوجد عملاء</td></tr>
+                <tr><td colspan="9" class="text-center text-muted py-4">لا يوجد فلاحين</td></tr>
                 @endforelse
             </tbody>
         </table>

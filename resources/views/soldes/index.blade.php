@@ -21,7 +21,7 @@
         <form method="GET" class="row g-2 mb-3">
             <div class="col-sm-4">
                 <select name="client_id" class="form-select form-select-sm">
-                    <option value="">كل العملاء</option>
+                    <option value="">كل الفلاحين</option>
                     @foreach($clients as $c)
                         <option value="{{ $c->id }}" {{ request('client_id') == $c->id ? 'selected' : '' }}>
                             {{ $c }}
@@ -60,7 +60,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>العميل</th>
+                    <th>الفلاح</th>
                     @if($type === 'debit') <th>الصنبور</th> @endif
                     <th>التاريخ</th>
                     @if($type === 'credit') <th>المبلغ</th> @endif

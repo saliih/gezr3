@@ -87,7 +87,7 @@
 
     <div class="mt-4 d-flex gap-2">
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-check-lg me-1"></i> {{ $client ? 'حفظ التعديلات' : 'إضافة العميل' }}
+            <i class="bi bi-check-lg me-1"></i> {{ $client ? 'حفظ التعديلات' : 'إضافة الفلاح' }}
         </button>
         <a href="{{ $client ? route('clients.show', $client) : route('clients.index') }}"
            class="btn btn-outline-secondary">إلغاء</a>

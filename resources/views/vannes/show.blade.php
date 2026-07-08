@@ -34,14 +34,14 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-header"><h5><i class="bi bi-people me-2"></i>العملاء</h5></div>
+            <div class="card-header"><h5><i class="bi bi-people me-2"></i>الفلاحين</h5></div>
             <div class="card-body">
                 @forelse($vanne->clients as $c)
                     <a href="{{ route('clients.show', $c) }}" class="badge bg-light text-dark border text-decoration-none mb-1 d-inline-block">
                         {{ $c->name }}
                     </a>
                 @empty
-                    <p class="text-muted mb-0">لا يوجد عملاء</p>
+                    <p class="text-muted mb-0">لا يوجد فلاحين</p>
                 @endforelse
             </div>
         </div>

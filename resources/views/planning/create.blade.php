@@ -21,7 +21,7 @@
             <thead class="table-light">
                 <tr>
                     <th class="text-center" style="width:40px">#</th>
-                    <th>العميل</th>
+                    <th>الفلاح</th>
                     <th>المرجع</th>
                     <th>الصنبور</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد القديم</th>
@@ -73,7 +73,7 @@
             <thead class="table-light">
                 <tr>
                     <th>تاريخ التخطيط</th>
-                    <th>العميل</th>
+                    <th>الفلاح</th>
                     <th>الصنبور</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد الجديد</th>
@@ -166,7 +166,7 @@ $(function () {
             '<td class="text-center text-muted small row-num"></td>' +
             '<td><select name="rows[' + i + '][client_id]" class="form-select form-select-sm client-sel" required>' + buildClientOptions() + '</select></td>' +
             '<td><input type="text"   name="rows[' + i + '][ref_client]"  class="form-control form-control-sm ref-client bg-light" readonly placeholder="—"></td>' +
-            '<td><select name="rows[' + i + '][vannes_id]" class="form-select form-select-sm vanne-sel no-select2" disabled required><option value="">-- اختر العميل أولاً --</option></select></td>' +
+            '<td><select name="rows[' + i + '][vannes_id]" class="form-select form-select-sm vanne-sel no-select2" disabled required><option value="">-- اختر الفلاح أولاً --</option></select></td>' +
             '<td><input type="number" name="rows[' + i + '][old_counter]" class="form-control form-control-sm text-end old-counter bg-light" readonly dir="ltr"></td>' +
             '<td><input type="number" name="rows[' + i + '][new_counter]" class="form-control form-control-sm text-end new-counter" min="0" dir="ltr" placeholder="0"></td>' +
             '<td><input type="text"   name="rows[' + i + '][consume]"     class="form-control form-control-sm text-end consume-display bg-light" readonly dir="ltr" placeholder="—"></td>' +

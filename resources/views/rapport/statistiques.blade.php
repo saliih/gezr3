@@ -25,7 +25,7 @@
             <div class="stat-icon" style="background:#e3f2fd;color:#1565c0"><i class="bi bi-people-fill"></i></div>
             <div>
                 <div class="stat-value">{{ $totalClients }}</div>
-                <div class="stat-label">إجمالي العملاء</div>
+                <div class="stat-label">إجمالي الفلاحين</div>
             </div>
         </div>
     </div>

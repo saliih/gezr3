@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'تعديل عميل')
-@section('page-title', 'تعديل العميل: ' . $client->name)
+@section('title', 'تعديل فلاح')
+@section('page-title', 'تعديل الفلاح: ' . $client->name)
 
 @section('content')
 <div class="card" style="max-width:800px">

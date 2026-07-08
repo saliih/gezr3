@@ -22,9 +22,9 @@
 
             {{-- Client --}}
             <div class="col-md-8">
-                <label class="form-label fw-semibold">العميل <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">الفلاح <span class="text-danger">*</span></label>
                 <select name="client_id" id="client_id" class="form-select" required>
-                    <option value="">-- اختر عميل --</option>
+                    <option value="">-- اختر فلاح --</option>
                     @foreach($clients as $c)
                         <option value="{{ $c->id }}" {{ old('client_id') == $c->id ? 'selected' : '' }}>
                             {{ $c }}
@@ -32,7 +32,7 @@
                     @endforeach
                 </select>
                 <div id="already-active-warn" class="text-warning mt-1 small d-none">
-                    <i class="bi bi-exclamation-triangle-fill"></i> هذا العميل مفعّل مسبقاً لسنة {{ $year }}
+                    <i class="bi bi-exclamation-triangle-fill"></i> هذا الفلاح مفعّل مسبقاً لسنة {{ $year }}
                 </div>
             </div>
 
@@ -105,7 +105,7 @@
                 </label>
                 <div id="vannes-container" class="row g-2"></div>
                 <div id="no-vannes-warn" class="text-danger mt-1 small d-none">
-                    <i class="bi bi-exclamation-triangle-fill"></i> لا توجد فوانات مرتبطة بهذا العميل
+                    <i class="bi bi-exclamation-triangle-fill"></i> لا توجد فوانات مرتبطة بهذا الفلاح
                 </div>
             </div>
 

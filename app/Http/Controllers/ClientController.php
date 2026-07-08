@@ -74,7 +74,7 @@ class ClientController extends Controller
         }
 
         return redirect()->route('clients.index')
-            ->with('success', 'تم إضافة العميل بنجاح.');
+            ->with('success', 'تم إضافة الفلاح بنجاح.');
     }
 
     public function show(Client $client)
@@ -137,7 +137,7 @@ class ClientController extends Controller
         $client->vannes()->sync($data['vannes'] ?? []);
 
         return redirect()->route('clients.show', $client)
-            ->with('success', 'تم تحديث العميل بنجاح.');
+            ->with('success', 'تم تحديث الفلاح بنجاح.');
     }
 
     public function destroy(Client $client)
@@ -145,6 +145,6 @@ class ClientController extends Controller
         $client->vannes()->detach();
         $client->delete();
         return redirect()->route('clients.index')
-            ->with('success', 'تم حذف العميل.');
+            ->with('success', 'تم حذف الفلاح.');
     }
 }
