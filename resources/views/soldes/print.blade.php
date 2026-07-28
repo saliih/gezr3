@@ -51,10 +51,10 @@
 
         tr:nth-child(even) td { background: #f5f5f5; }
 
-        .write-col { background: #fffde7 !important; color: #000; }
+        .write-col { background: #fffde7 !important; color: #000; min-width: 100px; }
 
-        th.write-col-header { min-width: 200px; font-size: 12px; }
-        td.write-merged { min-width: 200px; background: #fffde7 !important; }
+        th.client-merged { min-width: 220px; }
+        td.client-merged { min-width: 220px; }
 
         .footer {
             margin-top: 10px;
@@ -86,11 +86,11 @@
         <tr>
             <th>#</th>
             <th>الصنبور</th>
-            <th>الفلاح</th>
-            <th>رقم الملف</th>
-            <th>الهاتف</th>
+            <th class="client-merged" colspan="3">الفلاح &nbsp;|&nbsp; رقم الملف &nbsp;|&nbsp; الهاتف</th>
             <th>العداد القديم</th>
-            <th class="write-col write-col-header" colspan="3">العداد الجديد &nbsp;|&nbsp; الاستهلاك &nbsp;|&nbsp; ملاحظات</th>
+            <th class="write-col">العداد الجديد</th>
+            <th class="write-col">الاستهلاك</th>
+            <th class="write-col">ملاحظات</th>
         </tr>
     </thead>
     <tbody>
@@ -98,11 +98,15 @@
         <tr>
             <td>{{ $i + 1 }}</td>
             <td><strong>{{ $solde->vannes ?? '—' }}</strong></td>
-            <td>{{ $solde->client?->name ?? '—' }}</td>
-            <td>{{ $solde->client?->num_dossier ?? '—' }}</td>
-            <td dir="ltr">{{ $solde->client?->tel ?? '—' }}</td>
+            <td class="client-merged" colspan="3">
+                {{ $solde->client?->name ?? '—' }}
+                @if($solde->client?->num_dossier) &nbsp;|&nbsp; {{ $solde->client->num_dossier }} @endif
+                @if($solde->client?->tel) &nbsp;|&nbsp; <span dir="ltr">{{ $solde->client->tel }}</span> @endif
+            </td>
             <td dir="ltr">{{ number_format($solde->old_counter ?? 0) }}</td>
-            <td class="write-merged" colspan="3">&nbsp;</td>
+            <td class="write-col">&nbsp;</td>
+            <td class="write-col">&nbsp;</td>
+            <td class="write-col">&nbsp;</td>
         </tr>
         @endforeach
     </tbody>
