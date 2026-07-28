@@ -35,22 +35,26 @@
         th {
             background: #1e2a3a;
             color: #fff;
-            padding: 5px 6px;
+            padding: 10px 8px;
             text-align: center;
-            font-size: 10px;
+            font-size: 11px;
             border: 1px solid #000;
         }
 
         td {
-            padding: 5px 6px;
+            padding: 10px 8px;
             border: 1px solid #ccc;
             text-align: center;
             vertical-align: middle;
+            height: 36px;
         }
 
         tr:nth-child(even) td { background: #f5f5f5; }
 
-        .write-col { min-width: 60px; background: #fffde7 !important; color: #000; }
+        .write-col { background: #fffde7 !important; color: #000; }
+
+        th.write-col-header { min-width: 200px; font-size: 12px; }
+        td.write-merged { min-width: 200px; background: #fffde7 !important; }
 
         .footer {
             margin-top: 10px;
@@ -86,9 +90,7 @@
             <th>رقم الملف</th>
             <th>الهاتف</th>
             <th>العداد القديم</th>
-            <th class="write-col">العداد الجديد</th>
-            <th class="write-col">الاستهلاك</th>
-            <th class="write-col">ملاحظات</th>
+            <th class="write-col write-col-header" colspan="3">العداد الجديد &nbsp;|&nbsp; الاستهلاك &nbsp;|&nbsp; ملاحظات</th>
         </tr>
     </thead>
     <tbody>
@@ -100,9 +102,7 @@
             <td>{{ $solde->client?->num_dossier ?? '—' }}</td>
             <td dir="ltr">{{ $solde->client?->tel ?? '—' }}</td>
             <td dir="ltr">{{ number_format($solde->old_counter ?? 0) }}</td>
-            <td class="write-col">&nbsp;</td>
-            <td class="write-col">&nbsp;</td>
-            <td class="write-col">&nbsp;</td>
+            <td class="write-merged" colspan="3">&nbsp;</td>
         </tr>
         @endforeach
     </tbody>
