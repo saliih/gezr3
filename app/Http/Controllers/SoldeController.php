@@ -274,7 +274,7 @@ class SoldeController extends Controller
             ->where(fn($q) => $q->whereNull('new_counter')->orWhere('new_counter', 0))
             ->join('vannes', 'solde.vannes_id', '=', 'vannes.id')
             ->orderBy('vannes.reference')
-            ->orderBy('vannes.link')
+            ->orderByRaw('CAST(vannes.link AS UNSIGNED)')
             ->select('solde.*')
             ->get();
 
