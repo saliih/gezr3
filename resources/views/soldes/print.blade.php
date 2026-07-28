@@ -94,7 +94,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($soldes as $i => $solde)
+        @foreach($soldes->sortBy(fn($s) => [$s->vannes?->reference, (int)$s->vannes?->link]) as $i => $solde)
         <tr>
             <td>{{ $i + 1 }}</td>
             <td><strong>{{ $solde->vannes ?? '—' }}</strong></td>
