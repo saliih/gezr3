@@ -272,11 +272,11 @@ class SoldeController extends Controller
             ->where('type', 'debit')
             ->where('plan_date', $date)
             ->where(fn($q) => $q->whereNull('new_counter')->orWhere('new_counter', 0))
-            ->join('vannes', 'solde.vannes_id', '=', 'vannes.id')
-            ->orderBy('vannes.reference')
-            ->orderByRaw('CAST(vannes.link AS UNSIGNED)')
-            ->select('solde.*')
-            ->get();
+            ->get()
+            ->sortBy([
+                fn($a, $b) => strcmp($a->vannes?->reference ?? '', $b->vannes?->reference ?? ''),
+                fn($a, $b) => (int)($a->vannes?->link ?? 0) <=> (int)($b->vannes?->link ?? 0),
+            ]);
 
         return view('soldes.print', compact('soldes', 'date'));
     }
