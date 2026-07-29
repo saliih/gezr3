@@ -18,7 +18,7 @@
                        value="{{ request('search') }}">
             </div>
             <div class="col-sm-6 col-md-3">
-                <select name="vannes[]" class="form-select form-select-sm" multiple data-placeholder="— تصفية بالصنبور —">
+                <select name="vannes[]" class="form-select form-select-sm" multiple data-placeholder="— تصفية بالعداد —">
                     @foreach($vannes as $v)
                         <option value="{{ $v->id }}" {{ in_array($v->id, request('vannes', [])) ? 'selected' : '' }}>
                             {{ $v->reference }}{{ $v->link }}
@@ -45,7 +45,7 @@
                     <th>رقم الملف</th>
                     <th>CIN</th>
                     <th>الهاتف</th>
-                    <th>الصنابير</th>
+                    <th>العدادات</th>
                     <th>الحالة {{ $year }}</th>
                     <th>الرصيد القديم</th>
                     <th></th>

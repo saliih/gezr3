@@ -47,7 +47,7 @@
         </div>
 
         <div class="card mb-3">
-            <div class="card-header"><h5><i class="bi bi-tools me-2"></i>الصنابير</h5></div>
+            <div class="card-header"><h5><i class="bi bi-tools me-2"></i>العدادات</h5></div>
             <div class="card-body">
                 @forelse($client->vannes as $vanne)
                     <span class="badge bg-primary mb-1">{{ $vanne->reference }}{{ $vanne->link }}</span>
@@ -110,7 +110,7 @@
                         <h6 class="mt-3 mb-2 text-muted">
                             <i class="bi bi-droplet me-1"></i>
                             @if($vanne)
-                                الصنبور : <strong>{{ $vanne->reference }}{{ $vanne->link }}</strong>
+                                العداد : <strong>{{ $vanne->reference }}{{ $vanne->link }}</strong>
                             @else
                                 بدون صنبور
                             @endif

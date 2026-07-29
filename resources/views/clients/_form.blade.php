@@ -68,7 +68,7 @@
 
     @if($vannes->count())
     <hr>
-    <h6 class="text-muted mb-2">الصنابير المرتبطة</h6>
+    <h6 class="text-muted mb-2">العدادات المرتبطة</h6>
     <div class="row g-2">
         @foreach($vannes as $vanne)
         <div class="col-sm-4 col-md-3">

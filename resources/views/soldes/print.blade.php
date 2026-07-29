@@ -38,12 +38,12 @@
             padding: 10px 8px;
             text-align: center;
             font-size: 11px;
-            border: 1px solid #000;
+            border: 5px solid #000;
         }
 
         td {
             padding: 10px 8px;
-            border: 1px solid #ccc;
+            border: 5px solid #ccc;
             text-align: center;
             vertical-align: middle;
             height: 36px;
@@ -73,7 +73,7 @@
 <div class="header">
     <div>
         <h1><i>GEZR</i> — تخطيط الاستهلاك</h1>
-        <div style="font-size:11px; color:#444; margin-top:3px;">الصنابير غير المسجّلة بعد</div>
+        <div style="font-size:11px; color:#444; margin-top:3px;">العدادات غير المسجّلة بعد</div>
     </div>
     <div class="date">تاريخ التخطيط : {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</div>
 </div>
@@ -85,7 +85,7 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>الصنبور</th>
+            <th>العداد</th>
             <th class="client-merged" colspan="3">الفلاح &nbsp;|&nbsp; رقم الملف &nbsp;|&nbsp; الهاتف</th>
             <th>العداد القديم</th>
             <th class="write-col">العداد الجديد</th>
@@ -103,7 +103,7 @@
                 @if($solde->client?->num_dossier) &nbsp;|&nbsp; {{ $solde->client->num_dossier }} @endif
                 @if($solde->client?->tel) &nbsp;|&nbsp; <span dir="ltr">{{ $solde->client->tel }}</span> @endif
             </td>
-            <td dir="ltr">{{ number_format($solde->old_counter ?? 0) }}</td>
+            <td>&nbsp;</td>
             <td class="write-col">&nbsp;</td>
             <td class="write-col">&nbsp;</td>
             <td class="write-col">&nbsp;</td>
@@ -113,7 +113,7 @@
 </table>
 
 <div class="footer">
-    عدد الصنابير : {{ $soldes->count() }} &nbsp;|&nbsp;
+    عدد العدادات : {{ $soldes->count() }} &nbsp;|&nbsp;
     طُبع بتاريخ : {{ now()->format('d/m/Y H:i') }}
 </div>
 @endif

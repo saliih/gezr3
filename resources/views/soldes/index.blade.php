@@ -61,7 +61,7 @@
                 <tr>
                     <th>#</th>
                     <th>الفلاح</th>
-                    @if($type === 'debit') <th>الصنبور</th> @endif
+                    @if($type === 'debit') <th>العداد</th> @endif
                     <th>التاريخ</th>
                     @if($type === 'credit') <th>المبلغ</th> @endif
                     @if($type === 'debit') <th>تاريخ التخطيط</th><th>القديم</th><th>الجديد</th><th>الاستهلاك</th> @endif

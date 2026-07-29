@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="mb-4">
-                <label class="form-label fw-semibold">عدد الصنابير في اليوم</label>
+                <label class="form-label fw-semibold">عدد العدادات في اليوم</label>
                 <input type="number" name="valve_per_day" class="form-control" required
                        value="{{ old('valve_per_day', $params->valve_per_day) }}">
             </div>

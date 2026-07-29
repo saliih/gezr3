@@ -46,7 +46,7 @@ class VannesController extends Controller
         ]);
 
         return redirect()->route('vannes.index')
-            ->with('success', 'تم إضافة الصنبور بنجاح.');
+            ->with('success', 'تم إضافة العداد بنجاح.');
     }
 
     public function edit(Vannes $vanne)
@@ -73,7 +73,7 @@ class VannesController extends Controller
         ]);
 
         return redirect()->route('vannes.index')
-            ->with('success', 'تم تحديث الصنبور بنجاح.');
+            ->with('success', 'تم تحديث العداد بنجاح.');
     }
 
     public function destroy(Vannes $vanne)
@@ -81,7 +81,7 @@ class VannesController extends Controller
         $vanne->clients()->detach();
         $vanne->delete();
         return redirect()->route('vannes.index')
-            ->with('success', 'تم حذف الصنبور.');
+            ->with('success', 'تم حذف العداد.');
     }
 
     public function show(Vannes $vanne)

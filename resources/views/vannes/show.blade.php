@@ -7,7 +7,7 @@
     <div class="col-md-4">
         <div class="card mb-3">
             <div class="card-header">
-                <h5><i class="bi bi-tools me-2"></i>معلومات الصنبور</h5>
+                <h5><i class="bi bi-tools me-2"></i>معلومات العداد</h5>
                 <a href="{{ route('vannes.edit', $vanne) }}" class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-pencil"></i>
                 </a>

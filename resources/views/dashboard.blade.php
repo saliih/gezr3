@@ -62,7 +62,7 @@
             </div>
             <div>
                 <div class="stat-value">{{ number_format($totalVannes) }}</div>
-                <div class="stat-label">الصنابير ({{ $vannesEnabled }} مفعّل)</div>
+                <div class="stat-label">العدادات ({{ $vannesEnabled }} مفعّل)</div>
             </div>
         </div>
     </div>

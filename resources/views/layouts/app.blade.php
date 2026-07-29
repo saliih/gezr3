@@ -239,7 +239,7 @@
             <i class="bi bi-people"></i> الفلاحين
         </a>
         <a href="{{ route('vannes.index') }}" class="nav-link {{ request()->routeIs('vannes.*') ? 'active' : '' }}">
-            <i class="bi bi-tools"></i> الصنابير
+            <i class="bi bi-tools"></i> العدادات
         </a>
 
         <div class="nav-section">المعاملات</div>

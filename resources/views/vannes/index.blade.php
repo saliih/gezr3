@@ -1,11 +1,11 @@
 @extends('layouts.app')
-@section('title', 'الصنابير')
-@section('page-title', 'الصنابير')
+@section('title', 'العدادات')
+@section('page-title', 'العدادات')
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h5><i class="bi bi-tools me-2"></i>الصنابير <span class="badge bg-secondary">{{ $vannes->total() }}</span></h5>
+        <h5><i class="bi bi-tools me-2"></i>العدادات <span class="badge bg-secondary">{{ $vannes->total() }}</span></h5>
         <a href="{{ route('vannes.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg me-1"></i> إضافة صنبور
         </a>
@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>الصنبور</th>
+                    <th>العداد</th>
                     <th>الحالة</th>
                     <th>مستهلك</th>
                     <th>آخر قيمة</th>
@@ -74,7 +74,7 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <form method="POST" action="{{ route('vannes.destroy', $vanne) }}"
-                                  onsubmit="return confirm('حذف الصنبور؟')">
+                                  onsubmit="return confirm('حذف العداد؟')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>

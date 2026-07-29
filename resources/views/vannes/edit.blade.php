@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title', 'تعديل صنبور')
-@section('page-title', 'تعديل الصنبور #' . $vanne->reference)
+@section('page-title', 'تعديل العداد #' . $vanne->reference)
 
 @section('content')
 <div class="card" style="max-width:500px">

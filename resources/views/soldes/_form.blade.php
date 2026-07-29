@@ -57,7 +57,7 @@
 
         @if($type === 'debit')
         <div class="col-md-6">
-            <label class="form-label fw-semibold">الصنبور</label>
+            <label class="form-label fw-semibold">العداد</label>
             <select name="vannes_id" class="form-select">
                 <option value="">-- اختر صنبور --</option>
                 @foreach($vannes as $v)

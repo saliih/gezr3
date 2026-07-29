@@ -23,7 +23,7 @@
                     <th class="text-center" style="width:40px">#</th>
                     <th>الفلاح</th>
                     <th>المرجع</th>
-                    <th>الصنبور</th>
+                    <th>العداد</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
@@ -57,7 +57,7 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <h5 class="mb-0">
-            <i class="bi bi-calendar-check me-2"></i>الصنابير المخططة وغير المسجّلة
+            <i class="bi bi-calendar-check me-2"></i>العدادات المخططة وغير المسجّلة
             <span class="badge bg-warning text-dark ms-1" id="pending-count">{{ $pending->count() }}</span>
         </h5>
         <div class="d-flex align-items-center gap-2">
@@ -74,7 +74,7 @@
                 <tr>
                     <th>تاريخ التخطيط</th>
                     <th>الفلاح</th>
-                    <th>الصنبور</th>
+                    <th>العداد</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
@@ -197,14 +197,14 @@ $(function () {
             $vanneSel.select2('destroy');
         }
         $vanneSel.prop('disabled', true)
-                 .html('<option value="">-- اختر الصنبور --</option>');
+                 .html('<option value="">-- اختر العداد --</option>');
 
         if (!clientId) return;
 
         $vanneSel.html('<option value="">جاري التحميل...</option>');
 
         $.getJSON(clientVannesUrl, { client_id: clientId }, function (data) {
-            var opts = '<option value="">-- اختر الصنبور --</option>';
+            var opts = '<option value="">-- اختر العداد --</option>';
             $.each(data.vannes, function(_, v) {
                 opts += '<option value="' + v.id + '" data-old-counter="' + v.old_counter + '">'
                       + $('<span>').text(v.label).html() + '</option>';
