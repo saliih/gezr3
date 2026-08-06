@@ -122,6 +122,9 @@
                                         <th>#</th>
                                         <th>النوع</th>
                                         <th>التاريخ</th>
+                                        <th>العداد القديم</th>
+                                        <th>العداد الجديد</th>
+                                        <th>الاستهلاك</th>
                                         <th>المبلغ (د.ت)</th>
                                         <th>البقية (م²)</th>
                                         <th>مقفل</th>
@@ -143,9 +146,30 @@
                                         <td>{{ $solde->date_transfert?->format('Y-m-d') ?? '—' }}</td>
                                         <td dir="ltr" class="text-end">
                                             @if($solde->type === 'debit')
+                                                {{ number_format($solde->old_counter ?? 0) }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td dir="ltr" class="text-end">
+                                            @if($solde->type === 'debit')
+                                                {{ $solde->new_counter ? number_format($solde->new_counter) : '—' }}
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td dir="ltr" class="text-end">
+                                            @if($solde->type === 'debit')
                                                 {{ number_format($solde->consume ?? 0, 2) }} م²
                                             @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td dir="ltr" class="text-end">
+                                            @if($solde->type !== 'debit')
                                                 {{ number_format($solde->amount ?? 0, 2) }} د.ت
+                                            @else
+                                                —
                                             @endif
                                         </td>
                                         <td dir="ltr" class="text-end">{{ number_format($solde->reminder ?? 0, 2) }} م²</td>
