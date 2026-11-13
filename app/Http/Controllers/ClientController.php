@@ -11,7 +11,15 @@ class ClientController extends Controller
 {
     public function index(Request $request)
     {
+        $year    = (int) date('Y');
+        $showAll = $request->boolean('show_all');
+
         $query = Client::with(['vannes', 'activations']);
+
+        // Par défaut : uniquement les clients activés pendant l'année en cours
+        if (!$showAll) {
+            $query->whereHas('activations', fn($q) => $q->where('year', $year));
+        }
 
         if ($search = $request->input('search')) {
             $query->where(function ($q) use ($search) {
@@ -27,10 +35,9 @@ class ClientController extends Controller
         }
 
         $clients = $query->orderBy('name')->paginate(25)->withQueryString();
-        $year = (int) date('Y');
         $vannes = Vannes::orderBy('reference')->get();
 
-        return view('clients.index', compact('clients', 'year', 'vannes'));
+        return view('clients.index', compact('clients', 'year', 'vannes', 'showAll'));
     }
 
     public function create()

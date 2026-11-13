@@ -26,9 +26,16 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-auto d-flex align-items-center">
+                <div class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox" name="show_all" value="1" id="show_all"
+                           {{ $showAll ? 'checked' : '' }}>
+                    <label class="form-check-label small" for="show_all">عرض الكل (بما في ذلك غير النشطين في {{ $year }})</label>
+                </div>
+            </div>
             <div class="col-auto">
                 <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
-                @if(request('search') || request('vannes'))
+                @if(request('search') || request('vannes') || $showAll)
                     <a href="{{ route('clients.index') }}" class="btn btn-sm btn-outline-danger ms-1">
                         <i class="bi bi-x"></i>
                     </a>
