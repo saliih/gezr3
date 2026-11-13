@@ -89,13 +89,16 @@ class ClientController extends Controller
         $client->load(['vannes', 'activations', 'soldes.vannes']);
 
         // Group soldes by year (most recent first, undated last) then by vannes_id
-        $soldesByYear = $client->soldes
+        $grouped = $client->soldes
             ->sortBy([
                 fn($a, $b) => ($b->effective_date?->timestamp ?? 0) <=> ($a->effective_date?->timestamp ?? 0),
                 fn($a, $b) => $b->id <=> $a->id,
             ])
-            ->groupBy(fn($s) => $s->effective_date?->year ?? '—')
-            ->sortBy(fn($group, $key) => $key === '—' ? 0 : (int) $key, SORT_REGULAR, true);
+            ->groupBy(fn($s) => $s->effective_date?->year ?? '—');
+
+        // Années triées de la plus récente à la plus ancienne, puis l'onglet « — » (sans date) en dernier
+        $soldesByYear = $grouped->except(['—'])->sortKeysDesc()
+            ->union($grouped->only(['—']));
 
         // Last reminder across all soldes
         $lastReminder = $client->soldes
