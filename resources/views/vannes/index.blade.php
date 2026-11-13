@@ -7,7 +7,7 @@
     <div class="card-header">
         <h5><i class="bi bi-tools me-2"></i>العدادات <span class="badge bg-secondary">{{ $vannes->total() }}</span></h5>
         <a href="{{ route('vannes.create') }}" class="btn btn-primary btn-sm">
-            <i class="bi bi-plus-lg me-1"></i> إضافة صنبور
+            <i class="bi bi-plus-lg me-1"></i> إضافة عداد
         </a>
     </div>
     <div class="card-body pb-0">
@@ -82,7 +82,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="7" class="text-center text-muted py-4">لا يوجد صنابير</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-4">لا يوجد عدادات</td></tr>
                 @endforelse
             </tbody>
         </table>

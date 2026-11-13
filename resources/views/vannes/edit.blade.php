@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'تعديل صنبور')
+@section('title', 'تعديل عداد')
 @section('page-title', 'تعديل العداد #' . $vanne->reference)
 
 @section('content')

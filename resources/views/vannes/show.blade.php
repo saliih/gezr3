@@ -1,6 +1,6 @@
 @extends('layouts.app')
-@section('title', 'صنبور #' . $vanne->reference)
-@section('page-title', 'صنبور ' . $vanne->reference . ($vanne->link ? ' ' . $vanne->link : ''))
+@section('title', 'عداد #' . $vanne->reference)
+@section('page-title', 'عداد ' . $vanne->reference . ($vanne->link ? ' ' . $vanne->link : ''))
 
 @section('content')
 <div class="row g-3">

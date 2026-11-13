@@ -79,7 +79,7 @@
 </div>
 
 @if($soldes->isEmpty())
-    <p style="text-align:center; padding:20px; color:#888;">لا توجد صنابير غير مسجّلة لهذا التاريخ.</p>
+    <p style="text-align:center; padding:20px; color:#888;">لا توجد عدادات غير مسجّلة لهذا التاريخ.</p>
 @else
 <table>
     <thead>

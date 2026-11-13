@@ -52,7 +52,7 @@
                 @forelse($client->vannes as $vanne)
                     <span class="badge bg-primary mb-1">{{ $vanne->reference }}{{ $vanne->link }}</span>
                 @empty
-                    <p class="text-muted mb-0">لا يوجد صنبور مرتبط</p>
+                    <p class="text-muted mb-0">لا يوجد عداد مرتبط</p>
                 @endforelse
             </div>
         </div>
@@ -112,7 +112,7 @@
                             @if($vanne)
                                 العداد : <strong>{{ $vanne->reference }}{{ $vanne->link }}</strong>
                             @else
-                                بدون صنبور
+                                بدون عداد
                             @endif
                         </h6>
                         <div class="table-responsive">

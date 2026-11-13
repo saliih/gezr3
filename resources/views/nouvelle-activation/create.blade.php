@@ -101,11 +101,11 @@
             <div class="col-12">
                 <label class="form-label fw-semibold">
                     المبلغ <span class="text-danger">*</span>
-                    <small class="text-muted fw-normal">(شراء م² - موزع على الفوانات)</small>
+                    <small class="text-muted fw-normal">(شراء م² - موزع على العدادات)</small>
                 </label>
                 <div id="vannes-container" class="row g-2"></div>
                 <div id="no-vannes-warn" class="text-danger mt-1 small d-none">
-                    <i class="bi bi-exclamation-triangle-fill"></i> لا توجد فوانات مرتبطة بهذا الفلاح
+                    <i class="bi bi-exclamation-triangle-fill"></i> لا توجد عدادات مرتبطة بهذا الفلاح
                 </div>
             </div>
 
