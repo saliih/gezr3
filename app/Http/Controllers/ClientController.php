@@ -89,7 +89,8 @@ class ClientController extends Controller
         $client->load(['vannes', 'activations', 'soldes.vannes']);
 
         // Group soldes by year (most recent first, undated last) then by vannes_id
-        $grouped = $client->soldes
+        // toBase() : la collection Eloquent redéfinit except()/only()/union() pour des modèles (getKey)
+        $grouped = $client->soldes->toBase()
             ->sortBy([
                 fn($a, $b) => ($b->effective_date?->timestamp ?? 0) <=> ($a->effective_date?->timestamp ?? 0),
                 fn($a, $b) => $b->id <=> $a->id,
