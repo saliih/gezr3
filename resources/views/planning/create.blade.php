@@ -167,7 +167,7 @@ $(function () {
             '<td><select name="rows[' + i + '][client_id]" class="form-select form-select-sm client-sel" required>' + buildClientOptions() + '</select></td>' +
             '<td><input type="text"   name="rows[' + i + '][ref_client]"  class="form-control form-control-sm ref-client bg-light" readonly placeholder="—"></td>' +
             '<td><select name="rows[' + i + '][vannes_id]" class="form-select form-select-sm vanne-sel no-select2" disabled required><option value="">-- اختر الفلاح أولاً --</option></select></td>' +
-            '<td><input type="number" name="rows[' + i + '][old_counter]" class="form-control form-control-sm text-end old-counter bg-light" readonly dir="ltr"></td>' +
+            '<td><input type="number" name="rows[' + i + '][old_counter]" class="form-control form-control-sm text-end old-counter" min="0" dir="ltr"></td>' +
             '<td><input type="number" name="rows[' + i + '][new_counter]" class="form-control form-control-sm text-end new-counter" min="0" dir="ltr" placeholder="0"></td>' +
             '<td><input type="text"   name="rows[' + i + '][consume]"     class="form-control form-control-sm text-end consume-display bg-light" readonly dir="ltr" placeholder="—"></td>' +
             '<td><input type="date"   name="rows[' + i + '][plan_date]"   class="form-control form-control-sm plan-date" value="' + def + '" required></td>' +
@@ -230,11 +230,11 @@ $(function () {
         $tr.find('.consume-display').val('');
     });
 
-    // New counter → calculate consumption
-    $tbody.on('input', '.new-counter', function () {
+    // Old / new counter → calculate consumption
+    $tbody.on('input', '.new-counter, .old-counter', function () {
         var $tr  = $(this).closest('tr');
         var oldV = parseFloat($tr.find('.old-counter').val()) || 0;
-        var newV = $(this).val();
+        var newV = $tr.find('.new-counter').val();
         var $cons = $tr.find('.consume-display');
         if (newV === '' || parseFloat(newV) === 0) {
             $cons.val('');
