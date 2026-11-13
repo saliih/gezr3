@@ -85,7 +85,7 @@
                 <ul class="nav nav-tabs" id="yearTabs" role="tablist">
                     @foreach($soldesByYear as $yr => $soldesOfYear)
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ $loop->first ? 'active' : '' }}"
+                        <button class="nav-link {{ (string) $yr === (string) $activeYear ? 'active' : '' }}"
                                 id="tab-{{ $yr }}"
                                 data-bs-toggle="tab"
                                 data-bs-target="#pane-{{ $yr }}"
@@ -98,7 +98,7 @@
 
                 <div class="tab-content" id="yearTabContent">
                     @foreach($soldesByYear as $yr => $soldesOfYear)
-                    <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
+                    <div class="tab-pane fade {{ (string) $yr === (string) $activeYear ? 'show active' : '' }}"
                          id="pane-{{ $yr }}" role="tabpanel">
 
                         @php
@@ -143,7 +143,7 @@
                                                 <span class="badge bg-warning text-dark">تفعيل</span>
                                             @endif
                                         </td>
-                                        <td>{{ $solde->date_transfert?->format('Y-m-d') ?? '—' }}</td>
+                                        <td>{{ $solde->effective_date?->format('Y-m-d') ?? '—' }}</td>
                                         <td dir="ltr" class="text-end">
                                             @if($solde->type === 'debit')
                                                 {{ number_format($solde->old_counter ?? 0) }}

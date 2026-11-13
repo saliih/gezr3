@@ -27,6 +27,15 @@ class Solde extends Model
         'reminder'       => 'float',
     ];
 
+    /**
+     * Date réelle de l'opération : date_transfert, sinon date planifiée,
+     * sinon date de création (les relevés de consommation n'ont pas toujours de date_transfert).
+     */
+    public function getEffectiveDateAttribute(): ?\Carbon\Carbon
+    {
+        return $this->date_transfert ?? $this->plan_date ?? $this->created_at;
+    }
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');

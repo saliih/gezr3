@@ -88,11 +88,14 @@ class ClientController extends Controller
     {
         $client->load(['vannes', 'activations', 'soldes.vannes']);
 
-        // Group soldes by year then by vannes_id
+        // Group soldes by year (most recent first, undated last) then by vannes_id
         $soldesByYear = $client->soldes
-            ->sortByDesc('date_transfert')
-            ->groupBy(fn($s) => $s->date_transfert?->year ?? '—')
-            ->sortKeysDesc();
+            ->sortBy([
+                fn($a, $b) => ($b->effective_date?->timestamp ?? 0) <=> ($a->effective_date?->timestamp ?? 0),
+                fn($a, $b) => $b->id <=> $a->id,
+            ])
+            ->groupBy(fn($s) => $s->effective_date?->year ?? '—')
+            ->sortBy(fn($group, $key) => $key === '—' ? 0 : (int) $key, SORT_REGULAR, true);
 
         // Last reminder across all soldes
         $lastReminder = $client->soldes
@@ -101,7 +104,9 @@ class ClientController extends Controller
             ->first()?->reminder ?? $client->old_solde;
 
         $year = (int) date('Y');
-        return view('clients.show', compact('client', 'year', 'soldesByYear', 'lastReminder'));
+        // Onglet actif : l'année en cours si elle existe, sinon le plus récent
+        $activeYear = $soldesByYear->has($year) ? $year : $soldesByYear->keys()->first();
+        return view('clients.show', compact('client', 'year', 'soldesByYear', 'lastReminder', 'activeYear'));
     }
 
     public function edit(Client $client)
