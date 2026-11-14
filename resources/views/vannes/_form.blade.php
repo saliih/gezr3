@@ -14,7 +14,7 @@
     @if($method === 'PUT') @method('PUT') @endif
 
     <div class="mb-3">
-        <label class="form-label fw-semibold">المرجع <span class="text-danger">*</span></label>
+        <label class="form-label fw-semibold">المعرف <span class="text-danger">*</span></label>
         <input type="number" name="reference" class="form-control" required
                value="{{ old('reference', $vanne?->reference) }}">
     </div>

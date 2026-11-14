@@ -101,9 +101,59 @@ class PlanningController extends Controller
         ]);
     }
 
+    /**
+     * Lignes valides (client + compteur renseignés) en doublon : soit avec une autre ligne
+     * du formulaire, soit avec un relevé déjà en base (même fellah, même compteur, même date).
+     * Retourne [['index' => clé de ligne, 'type' => 'form'|'db'], ...]
+     */
+    private function findConflicts(array $rows): array
+    {
+        $conflicts = [];
+        $seen      = [];
+
+        foreach ($rows as $i => $row) {
+            if (empty($row['vannes_id']) || empty($row['client_id'])) {
+                continue;
+            }
+
+            $date = !empty($row['plan_date']) ? $row['plan_date'] : date('Y-m-d');
+            $key  = $row['client_id'] . '|' . $row['vannes_id'] . '|' . $date;
+
+            if (isset($seen[$key])) {
+                $conflicts[] = ['index' => $i, 'type' => 'form'];
+                continue;
+            }
+            $seen[$key] = true;
+
+            $exists = Solde::where('type', 'debit')
+                ->where('client_id', $row['client_id'])
+                ->where('vannes_id', $row['vannes_id'])
+                ->whereDate('plan_date', $date)
+                ->exists();
+
+            if ($exists) {
+                $conflicts[] = ['index' => $i, 'type' => 'db'];
+            }
+        }
+
+        return $conflicts;
+    }
+
+    public function check(Request $request)
+    {
+        return response()->json([
+            'conflicts' => $this->findConflicts($request->input('rows', [])),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $rows = $request->input('rows', []);
+
+        // Garde-fou serveur : rien n'est enregistré s'il y a un doublon
+        if ($this->findConflicts($rows)) {
+            return back()->with('error', 'يوجد سطر مكرر (نفس الفلاح والعداد والتاريخ). لم يتم حفظ أي سطر، صحّح ثم أعد المحاولة.');
+        }
 
         $created = 0;
         foreach ($rows as $row) {

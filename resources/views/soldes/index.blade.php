@@ -68,6 +68,8 @@
                     <th>البقية</th>
                     <th>رقم التحويل</th>
                     <th>مقفل</th>
+                    <th>أنشأه</th>
+                    <th>آخر تعديل</th>
                     <th></th>
                 </tr>
             </thead>
@@ -102,6 +104,8 @@
                             <i class="bi bi-lock-fill text-warning"></i>
                         @endif
                     </td>
+                    <td class="small">{{ $solde->creator?->username ?? '—' }}</td>
+                    <td class="small">{{ $solde->editor?->username ?? '—' }}</td>
                     <td>
                         <div class="d-flex gap-1">
                             <a href="{{ route($config['prefix'] . '.edit', $solde) }}" class="btn btn-sm btn-outline-primary">
@@ -116,7 +120,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="12" class="text-center text-muted py-4">لا توجد عمليات</td></tr>
+                <tr><td colspan="14" class="text-center text-muted py-4">لا توجد عمليات</td></tr>
                 @endforelse
             </tbody>
         </table>

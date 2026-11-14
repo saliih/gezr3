@@ -19,6 +19,19 @@ class Solde extends Model
         'type', 'coupon_number', 'auto_number', 'plan_date', 'locked',
     ];
 
+    protected static function booted(): void
+    {
+        // Traçabilité : utilisateur qui a créé / modifié la ligne (auth()->id() renvoie le username ici)
+        static::creating(function (Solde $s) {
+            $uid = auth()->user()?->id;
+            $s->created_by = $s->created_by ?? $uid;
+            $s->updated_by = $uid;
+        });
+        static::updating(function (Solde $s) {
+            $s->updated_by = auth()->user()?->id ?? $s->updated_by;
+        });
+    }
+
     // Une seule date métier : plan_date (date de l'opération / du relevé).
     // created_at reste en base pour l'audit mais n'est affichée nulle part.
     protected $casts = [
@@ -27,6 +40,16 @@ class Solde extends Model
         'amount'    => 'float',
         'reminder'  => 'float',
     ];
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function editor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 
     public function client(): BelongsTo
     {

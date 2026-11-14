@@ -20,7 +20,7 @@ class SoldeController extends Controller
 
     public function index(Request $request, string $type = 'credit')
     {
-        $query = Solde::with(['client', 'vannes'])
+        $query = Solde::with(['client', 'vannes', 'creator', 'editor'])
             ->where('type', $type);
 
         if ($request->filled('client_id')) {

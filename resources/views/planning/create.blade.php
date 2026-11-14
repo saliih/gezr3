@@ -7,6 +7,8 @@
 <form method="POST" action="{{ route('planning.store') }}" id="planning-form">
 @csrf
 
+<div id="planning-alert" class="alert alert-danger d-none" role="alert"></div>
+
 <div class="card mb-4">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2" style="position:sticky;top:0;z-index:10;background:#fff;">
         <h5 class="mb-0"><i class="bi bi-calendar3 me-2"></i>تخطيط جديد</h5>
@@ -26,7 +28,7 @@
                 <tr>
                     <th class="text-center" style="width:40px">#</th>
                     <th>الفلاح</th>
-                    <th>المرجع</th>
+                    <th>المعرف</th>
                     <th>العداد</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد الجديد</th>
@@ -275,6 +277,54 @@ $(function () {
     });
 
     syncRows(parseInt($count.val(), 10) || 1);
+
+    // ── Vérification des doublons (fellah + compteur + date) avant l'enregistrement ──
+    var checkUrl = @json(route('planning.check'));
+    var $form    = $('#planning-form');
+    var $alert   = $('#planning-alert');
+
+    function clearConflicts() {
+        $alert.addClass('d-none').empty();
+        $tbody.find('tr').removeClass('table-danger');
+    }
+
+    // Toute modification d'une ligne efface l'alerte, pour revalider proprement
+    $tbody.on('change input', 'select, input', clearConflicts);
+
+    $form.on('submit', function (e) {
+        if ($form.data('checked')) return;           // déjà vérifié → envoi réel
+        e.preventDefault();
+        clearConflicts();
+
+        var $btn = $form.find('button[type=submit]').prop('disabled', true);
+
+        $.post(checkUrl, $form.serialize())
+            .done(function (res) {
+                if (!res.conflicts || !res.conflicts.length) {
+                    $form.data('checked', true);
+                    $form[0].submit();
+                    return;
+                }
+                var msgs = [];
+                $.each(res.conflicts, function (_, c) {
+                    var $tr = $tbody.find('[name="rows[' + c.index + '][client_id]"]').closest('tr');
+                    $tr.addClass('table-danger');
+                    var n = $tr.find('.row-num').text();
+                    msgs.push('السطر ' + n + ' : ' + (c.type === 'form'
+                        ? 'مكرّر مع سطر آخر في هذا النموذج (نفس الفلاح والعداد والتاريخ)'
+                        : 'هذه القراءة مسجّلة مسبقاً (نفس الفلاح والعداد والتاريخ)'));
+                });
+                $alert.html('<strong><i class="bi bi-exclamation-triangle me-1"></i>لم يتم الحفظ، صحّح الأسطر المحددة ثم أعد التأكيد:</strong><ul class="mb-0 mt-2"><li>'
+                    + msgs.join('</li><li>') + '</li></ul>').removeClass('d-none');
+                $('html, body').animate({ scrollTop: 0 }, 200);
+                $btn.prop('disabled', false);
+            })
+            .fail(function () {
+                // Vérification indisponible : le serveur refuse de toute façon les doublons
+                $form.data('checked', true);
+                $form[0].submit();
+            });
+    });
 
     // ── Pending table: date filter ───────────────────────────────────────
     function applyFilter() {

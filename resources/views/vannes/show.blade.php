@@ -14,7 +14,7 @@
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
-                    <dt class="col-5 text-muted">المرجع</dt>
+                    <dt class="col-5 text-muted">المعرف</dt>
                     <dd class="col-7 fw-semibold">{{ $vanne->reference }}</dd>
                     <dt class="col-5 text-muted">الرابط</dt>
                     <dd class="col-7">{{ $vanne->link ?? '—' }}</dd>

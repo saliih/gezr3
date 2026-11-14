@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
     // Planning
     Route::get('planning/client-vannes', [PlanningController::class, 'clientVannes'])->name('planning.client-vannes');
     Route::get('planning/create', [PlanningController::class, 'create'])->name('planning.create');
+    Route::post('planning/check', [PlanningController::class, 'check'])->name('planning.check');
     Route::post('planning', [PlanningController::class, 'store'])->name('planning.store');
     Route::post('planning/{solde}/releve', [PlanningController::class, 'updateReleve'])->name('planning.releve');
 

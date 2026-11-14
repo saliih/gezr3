@@ -14,7 +14,7 @@
         <form method="GET" class="row g-2 mb-3">
             <div class="col-sm-4">
                 <input type="text" name="search" class="form-control form-control-sm"
-                       placeholder="بحث بالمرجع..." value="{{ request('search') }}">
+                       placeholder="بحث بالمعرف..." value="{{ request('search') }}">
             </div>
             <div class="col-sm-3">
                 <select name="enable" class="form-select form-select-sm">
