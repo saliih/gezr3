@@ -141,7 +141,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <label class="form-label fw-semibold">اختر تاريخ التخطيط</label>
+                <label class="form-label fw-semibold">اختر تاريخ السقي</label>
                 <input type="date" id="printDate" class="form-control" value="{{ date('Y-m-d') }}">
             </div>
             <div class="modal-footer">

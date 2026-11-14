@@ -75,7 +75,7 @@
         <h1><i>GEZR</i> — تخطيط الاستهلاك</h1>
         <div style="font-size:11px; color:#444; margin-top:3px;">العدادات غير المسجّلة بعد</div>
     </div>
-    <div class="date">تاريخ التخطيط : {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</div>
+    <div class="date">تاريخ السقي : {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}</div>
 </div>
 
 @if($soldes->isEmpty())

@@ -33,7 +33,7 @@
                     <th class="text-end" dir="ltr" style="width:110px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:110px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
-                    <th style="width:150px">تاريخ التخطيط</th>
+                    <th style="width:150px">تاريخ السقي</th>
                     <th style="width:50px"></th>
                 </tr>
             </thead>
@@ -78,7 +78,7 @@
         <table class="table table-sm table-bordered align-middle mb-0">
             <thead class="table-light">
                 <tr>
-                    <th>تاريخ التخطيط</th>
+                    <th>تاريخ السقي</th>
                     <th>الفلاح</th>
                     <th>العداد</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد القديم</th>
