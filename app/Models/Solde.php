@@ -19,15 +19,24 @@ class Solde extends Model
         'type', 'coupon_number', 'auto_number', 'plan_date', 'locked',
     ];
 
+    /** Les colonnes d'audit n'existent qu'après la migration : on ne les écrit que si elles sont présentes. */
+    private static function hasAuditColumns(): bool
+    {
+        static $has = null;
+        return $has ??= \Illuminate\Support\Facades\Schema::hasColumn('solde', 'created_by');
+    }
+
     protected static function booted(): void
     {
         // Traçabilité : utilisateur qui a créé / modifié la ligne (auth()->id() renvoie le username ici)
         static::creating(function (Solde $s) {
+            if (!self::hasAuditColumns()) return;
             $uid = auth()->user()?->id;
             $s->created_by = $s->created_by ?? $uid;
             $s->updated_by = $uid;
         });
         static::updating(function (Solde $s) {
+            if (!self::hasAuditColumns()) return;
             $s->updated_by = auth()->user()?->id ?? $s->updated_by;
         });
     }

@@ -326,6 +326,32 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    // Select2 : ignorer les espaces en début/fin du terme recherché (valable pour tous les select2 de l'app)
+    (function () {
+        var base = $.fn.select2.defaults.defaults && $.fn.select2.defaults.defaults.matcher;
+
+        function trimMatcher(params, data) {
+            var term = (params.term || '').trim();
+            if (term === '') return data;
+            var p = $.extend({}, params, { term: term });
+
+            if (typeof base === 'function') return base(p, data);
+
+            // Repli si le matcher d'origine n'est pas accessible
+            if (data.children && data.children.length) {
+                var kids = $.grep(data.children, function (c) { return trimMatcher(p, c) !== null; });
+                if (!kids.length) return null;
+                var copy = $.extend({}, data, true);
+                copy.children = kids;
+                return copy;
+            }
+            return String(data.text || '').toLowerCase().indexOf(term.toLowerCase()) > -1 ? data : null;
+        }
+
+        $.fn.select2.defaults.set('matcher', trimMatcher);
+    })();
+</script>
+<script>
     $(function () {
         $('select').not('.no-select2').select2({
             theme: 'bootstrap-5',
