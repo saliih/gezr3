@@ -14,27 +14,19 @@ class Solde extends Model
     const UPDATED_AT = 'updated_at';
 
     protected $fillable = [
-        'client_id', 'vannes_id', 'date_transfert', 'transfert_number',
+        'client_id', 'vannes_id', 'transfert_number',
         'amount', 'old_counter', 'new_counter', 'consume', 'reminder',
         'type', 'coupon_number', 'auto_number', 'plan_date', 'locked',
     ];
 
+    // Une seule date métier : plan_date (date de l'opération / du relevé).
+    // created_at reste en base pour l'audit mais n'est affichée nulle part.
     protected $casts = [
-        'date_transfert' => 'date',
-        'plan_date'      => 'date',
-        'locked'         => 'boolean',
-        'amount'         => 'float',
-        'reminder'       => 'float',
+        'plan_date' => 'date',
+        'locked'    => 'boolean',
+        'amount'    => 'float',
+        'reminder'  => 'float',
     ];
-
-    /**
-     * Date réelle de l'opération : date_transfert, sinon date planifiée,
-     * sinon date de création (les relevés de consommation n'ont pas toujours de date_transfert).
-     */
-    public function getEffectiveDateAttribute(): ?\Carbon\Carbon
-    {
-        return $this->date_transfert ?? $this->plan_date ?? $this->created_at;
-    }
 
     public function client(): BelongsTo
     {

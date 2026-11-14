@@ -86,7 +86,7 @@ class VannesController extends Controller
 
     public function show(Vannes $vanne)
     {
-        $vanne->load(['clients', 'soldes' => fn($q) => $q->with('client')->where('type', 'debit')->orderByDesc('date_transfert')]);
+        $vanne->load(['clients', 'soldes' => fn($q) => $q->with('client')->where('type', 'debit')->orderByDesc('plan_date')]);
 
         $stats = [
             'count'   => $vanne->soldes->count(),

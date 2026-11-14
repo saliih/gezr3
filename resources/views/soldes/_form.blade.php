@@ -29,9 +29,9 @@
         </div>
 
         <div class="col-md-4">
-            <label class="form-label fw-semibold">تاريخ العملية</label>
-            <input type="date" name="date_transfert" class="form-control"
-                   value="{{ old('date_transfert', $solde?->date_transfert?->format('Y-m-d') ?? date('Y-m-d')) }}">
+            <label class="form-label fw-semibold">التاريخ</label>
+            <input type="date" name="plan_date" class="form-control"
+                   value="{{ old('plan_date', $solde?->plan_date?->format('Y-m-d') ?? date('Y-m-d')) }}">
         </div>
 
         @if($type === 'credit')
@@ -82,11 +82,6 @@
             <label class="form-label fw-semibold">الاستهلاك (م³)</label>
             <input type="number" id="consume_display" class="form-control" readonly
                    value="{{ old('new_counter', $solde?->new_counter ?? 0) - old('old_counter', $solde?->old_counter ?? 0) }}">
-        </div>
-        <div class="col-md-3">
-            <label class="form-label fw-semibold">تاريخ القراءة</label>
-            <input type="date" name="plan_date" class="form-control"
-                   value="{{ old('plan_date', $solde?->plan_date?->format('Y-m-d')) }}">
         </div>
         @endif
 

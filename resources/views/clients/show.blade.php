@@ -143,7 +143,7 @@
                                                 <span class="badge bg-warning text-dark">تفعيل</span>
                                             @endif
                                         </td>
-                                        <td>{{ $solde->effective_date?->format('Y-m-d') ?? '—' }}</td>
+                                        <td>{{ $solde->plan_date?->format('Y-m-d') ?? '—' }}</td>
                                         <td dir="ltr" class="text-end">
                                             @if($solde->type === 'debit')
                                                 {{ number_format($solde->old_counter ?? 0) }}

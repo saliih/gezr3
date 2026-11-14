@@ -68,7 +68,6 @@ CREATE TABLE IF NOT EXISTS `solde` (
     `id`                INT AUTO_INCREMENT NOT NULL,
     `client_id`         INT DEFAULT NULL,
     `vannes_id`         INT DEFAULT NULL,
-    `date_transfert`    DATE DEFAULT NULL,
     `transfert_number`  VARCHAR(50) DEFAULT NULL,
     `amount`            DOUBLE PRECISION DEFAULT NULL,
     `old_counter`       INT DEFAULT NULL,
@@ -78,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `solde` (
     `type`              VARCHAR(10) NOT NULL,
     `coupon_number`     VARCHAR(10) DEFAULT NULL,
     `auto_number`       INT DEFAULT NULL,
-    `plan_date`         DATE DEFAULT NULL,
+    `plan_date`         DATE DEFAULT NULL, -- unique date métier (opération / relevé)
     `locked`            TINYINT(1) DEFAULT NULL,
     `created_at`        DATETIME DEFAULT NULL,
     `updated_at`        DATETIME DEFAULT NULL,

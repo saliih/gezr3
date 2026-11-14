@@ -64,7 +64,7 @@
                     @if($type === 'debit') <th>العداد</th> @endif
                     <th>التاريخ</th>
                     @if($type === 'credit') <th>المبلغ</th> @endif
-                    @if($type === 'debit') <th>تاريخ التخطيط</th><th>القديم</th><th>الجديد</th><th>الاستهلاك</th> @endif
+                    @if($type === 'debit') <th>القديم</th><th>الجديد</th><th>الاستهلاك</th> @endif
                     <th>البقية</th>
                     <th>رقم التحويل</th>
                     <th>مقفل</th>
@@ -86,12 +86,11 @@
                     @if($type === 'debit')
                     <td>{{ $solde->vannes ? $solde->vannes->reference . ($solde->vannes->link ?? '') : '—' }}</td>
                     @endif
-                    <td>{{ $solde->date_transfert?->format('Y-m-d') ?? '—' }}</td>
+                    <td>{{ $solde->plan_date?->format('Y-m-d') ?? '—' }}</td>
                     @if($type === 'credit')
                     <td class="fw-semibold text-success" dir="ltr" style="text-align:end">{{ number_format($solde->amount, 2) }} د.ت</td>
                     @endif
                     @if($type === 'debit')
-                    <td>{{ $solde->plan_date?->format('Y-m-d') ?? '—' }}</td>
                     <td dir="ltr" style="text-align:end">{{ $solde->old_counter }}</td>
                     <td dir="ltr" style="text-align:end">{{ $solde->new_counter }}</td>
                     <td class="fw-semibold text-primary" dir="ltr" style="text-align:end">{{ number_format($solde->consume) }} م²</td>

@@ -80,13 +80,12 @@
                             <th>البداية</th>
                             <th>النهاية</th>
                             <th>المستهلك</th>
-                            <th>تاريخ التسجيل</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($vanne->soldes as $s)
                         <tr>
-                            <td>{{ $s->date_transfert?->format('d/m/Y') ?? '—' }}</td>
+                            <td>{{ $s->plan_date?->format('d/m/Y') ?? '—' }}</td>
                             <td>
                                 @if($s->client)
                                     <a href="{{ route('clients.show', $s->client) }}" class="text-decoration-none">
@@ -99,10 +98,9 @@
                             <td>{{ $s->old_counter ?? '—' }}</td>
                             <td>{{ $s->new_counter ?? '—' }}</td>
                             <td class="fw-semibold text-primary">{{ number_format($s->consume) }} م²</td>
-                            <td class="text-muted">{{ $s->created_at?->format('d/m/Y') ?? '—' }}</td>
                         </tr>
                         @empty
-                        <tr><td colspan="6" class="text-center text-muted py-3">لا توجد قراءات</td></tr>
+                        <tr><td colspan="5" class="text-center text-muted py-3">لا توجد قراءات</td></tr>
                         @endforelse
                     </tbody>
                 </table>

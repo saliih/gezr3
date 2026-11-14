@@ -29,8 +29,8 @@ class NouvelleActivationController extends Controller
         // Remaining balance = reminder of last credit solde of current year for this client
         $lastCredit = Solde::where('client_id', $clientId)
             ->where('type', 'credit')
-            ->whereYear('date_transfert', $year)
-            ->orderByDesc('date_transfert')
+            ->whereYear('plan_date', $year)
+            ->orderByDesc('plan_date')
             ->orderByDesc('id')
             ->first();
 
@@ -69,7 +69,7 @@ class NouvelleActivationController extends Controller
     {
         $data = $request->validate([
             'client_id'         => 'required|exists:client,id',
-            'date_transfert'    => 'required|date',
+            'plan_date'         => 'required|date',
             'transfert_number'  => 'nullable|string|max:50',
             'coupon_number'     => 'nullable|string|max:10',
             'vanne_amount'      => 'required|array|min:1',
@@ -79,7 +79,7 @@ class NouvelleActivationController extends Controller
         $year    = (int) date('Y');
         $prevYear = $year - 1;
         $clientId = (int) $data['client_id'];
-        $date     = Carbon::parse($data['date_transfert']);
+        $date     = Carbon::parse($data['plan_date']);
 
         $client = Client::findOrFail($clientId);
         $clientVanneIds = $client->vannes()->pluck('vannes.id')->all();
@@ -96,8 +96,8 @@ class NouvelleActivationController extends Controller
         // Remaining balance = reminder of last credit solde of current year for this client
         $lastCredit = Solde::where('client_id', $clientId)
             ->where('type', 'credit')
-            ->whereYear('date_transfert', $year)
-            ->orderByDesc('date_transfert')
+            ->whereYear('plan_date', $year)
+            ->orderByDesc('plan_date')
             ->orderByDesc('id')
             ->first();
 
@@ -122,7 +122,7 @@ class NouvelleActivationController extends Controller
         // 2. Solde type='activate' for activation fee
         Solde::create([
             'client_id'        => $clientId,
-            'date_transfert'   => $date,
+            'plan_date'        => $date,
             'type'             => 'activate',
             'amount'           => $activationFee,
             'transfert_number' => $data['transfert_number'] ?? null,
@@ -134,7 +134,7 @@ class NouvelleActivationController extends Controller
         if ($remaining > 0) {
             Solde::create([
                 'client_id'        => $clientId,
-                'date_transfert'   => Carbon::create($prevYear, 12, 31),
+                'plan_date'        => Carbon::create($prevYear, 12, 31),
                 'type'             => 'credit',
                 'amount'           => $settlementAmount,
                 'transfert_number' => $data['transfert_number'] ?? null,
@@ -152,7 +152,7 @@ class NouvelleActivationController extends Controller
             Solde::create([
                 'client_id'        => $clientId,
                 'vannes_id'        => $vanneId,
-                'date_transfert'   => $date,
+                'plan_date'        => $date,
                 'type'             => 'credit',
                 'amount'           => $vanneAmount,
                 'transfert_number' => $data['transfert_number'] ?? null,

@@ -92,10 +92,10 @@ class ClientController extends Controller
         // toBase() : la collection Eloquent redéfinit except()/only()/union() pour des modèles (getKey)
         $grouped = $client->soldes->toBase()
             ->sortBy([
-                fn($a, $b) => ($b->effective_date?->timestamp ?? 0) <=> ($a->effective_date?->timestamp ?? 0),
+                fn($a, $b) => ($b->plan_date?->timestamp ?? 0) <=> ($a->plan_date?->timestamp ?? 0),
                 fn($a, $b) => $b->id <=> $a->id,
             ])
-            ->groupBy(fn($s) => $s->effective_date?->year ?? '—');
+            ->groupBy(fn($s) => $s->plan_date?->year ?? '—');
 
         // Années triées de la plus récente à la plus ancienne, puis l'onglet « — » (sans date) en dernier
         $soldesByYear = $grouped->except(['—'])->sortKeysDesc()
@@ -103,7 +103,6 @@ class ClientController extends Controller
 
         // Last reminder across all soldes
         $lastReminder = $client->soldes
-            ->sortByDesc('date_transfert')
             ->sortByDesc('id')
             ->first()?->reminder ?? $client->old_solde;
 

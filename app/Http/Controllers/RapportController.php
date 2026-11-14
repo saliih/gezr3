@@ -24,11 +24,11 @@ class RapportController extends Controller
         $fraisAbonnement = $activeClients * $activationFee;
 
         $montantCredite = Solde::where('type', 'credit')
-            ->whereYear('date_transfert', $year)
+            ->whereYear('plan_date', $year)
             ->sum('amount');
 
         $totalConsoM3 = Solde::where('type', 'debit')
-            ->whereYear('date_transfert', $year)
+            ->whereYear('plan_date', $year)
             ->sum('consume');
 
         $montantDebite = round($totalConsoM3 * $price, 2);

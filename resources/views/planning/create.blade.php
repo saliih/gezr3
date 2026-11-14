@@ -11,8 +11,12 @@
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2" style="position:sticky;top:0;z-index:10;background:#fff;">
         <h5 class="mb-0"><i class="bi bi-calendar3 me-2"></i>تخطيط جديد</h5>
         <div class="d-flex align-items-center gap-2">
-            <label class="mb-0 fw-semibold small text-muted">تاريخ التخطيط الافتراضي:</label>
-            <input type="date" id="default-date" class="form-control form-control-sm" value="{{ $defaultDate }}" style="width:160px">
+            <label class="mb-0 fw-semibold small text-muted" for="rows-count">عدد الأسطر:</label>
+            <select id="rows-count" class="form-select form-select-sm no-select2" style="width:90px">
+                @for($n = 1; $n <= 15; $n++)
+                    <option value="{{ $n }}" {{ $n === 5 ? 'selected' : '' }}>{{ $n }}</option>
+                @endfor
+            </select>
         </div>
     </div>
 
@@ -137,6 +141,9 @@ $(function () {
     var clientMap       = {};
     $.each(clients, function(_, c) { clientMap[c.id] = c; });
     var $tbody = $('#rows-container');
+    var $count = $('#rows-count');
+    var defaultDate = @json($defaultDate);
+    var MAX_ROWS = 15;
     var idx    = 0;
     var s2opts = { theme: 'bootstrap-5', dir: 'rtl', width: '100%' };
 
@@ -161,16 +168,16 @@ $(function () {
 
     function addRow() {
         var i   = idx++;
-        var def = $('#default-date').val();
+        var def = defaultDate;
         var $tr = $('<tr>').html(
             '<td class="text-center text-muted small row-num"></td>' +
-            '<td><select name="rows[' + i + '][client_id]" class="form-select form-select-sm client-sel" required>' + buildClientOptions() + '</select></td>' +
+            '<td><select name="rows[' + i + '][client_id]" class="form-select form-select-sm client-sel">' + buildClientOptions() + '</select></td>' +
             '<td><input type="text"   name="rows[' + i + '][ref_client]"  class="form-control form-control-sm ref-client bg-light" readonly placeholder="—"></td>' +
-            '<td><select name="rows[' + i + '][vannes_id]" class="form-select form-select-sm vanne-sel no-select2" disabled required><option value="">-- اختر الفلاح أولاً --</option></select></td>' +
+            '<td><select name="rows[' + i + '][vannes_id]" class="form-select form-select-sm vanne-sel no-select2" disabled><option value="">-- اختر الفلاح أولاً --</option></select></td>' +
             '<td><input type="number" name="rows[' + i + '][old_counter]" class="form-control form-control-sm text-end old-counter" min="0" dir="ltr"></td>' +
             '<td><input type="number" name="rows[' + i + '][new_counter]" class="form-control form-control-sm text-end new-counter" min="0" dir="ltr" placeholder="0"></td>' +
             '<td><input type="text"   name="rows[' + i + '][consume]"     class="form-control form-control-sm text-end consume-display bg-light" readonly dir="ltr" placeholder="—"></td>' +
-            '<td><input type="date"   name="rows[' + i + '][plan_date]"   class="form-control form-control-sm plan-date" value="' + def + '" required></td>' +
+            '<td><input type="date"   name="rows[' + i + '][plan_date]"   class="form-control form-control-sm plan-date" value="' + def + '"></td>' +
             '<td class="text-center"><button type="button" class="btn btn-sm btn-outline-danger remove-row"><i class="bi bi-trash"></i></button></td>'
         );
         $tbody.append($tr);
@@ -243,21 +250,31 @@ $(function () {
         }
     });
 
+    // Nombre de lignes : ajoute/retire des lignes en fin de tableau (les valeurs saisies sont conservées)
+    function syncRows(n) {
+        while ($tbody.children().length < n) addRow();
+        while ($tbody.children().length > n) $tbody.children().last().remove();
+        renumber();
+        $count.val(n);
+        $('#add-row').prop('disabled', n >= MAX_ROWS);
+    }
+
+    $count.on('change', function () {
+        syncRows(parseInt($(this).val(), 10) || 1);
+    });
+
     // Remove row
     $tbody.on('click', '.remove-row', function () {
+        if ($tbody.children().length <= 1) return;
         $(this).closest('tr').remove();
-        renumber();
+        syncRows($tbody.children().length);
     });
 
-    // Default date → update all plan-date fields
-    $('#default-date').on('change', function () {
-        var val = $(this).val();
-        $tbody.find('.plan-date').val(val);
+    $('#add-row').on('click', function () {
+        if ($tbody.children().length < MAX_ROWS) syncRows($tbody.children().length + 1);
     });
 
-    $('#add-row').on('click', addRow);
-
-    addRow();
+    syncRows(parseInt($count.val(), 10) || 1);
 
     // ── Pending table: date filter ───────────────────────────────────────
     function applyFilter() {

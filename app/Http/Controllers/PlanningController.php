@@ -90,7 +90,6 @@ class PlanningController extends Controller
             'consume'        => $consume,
             'amount'         => $amount,
             'reminder'       => $reminder,
-            'date_transfert' => $solde->plan_date ?? now()->toDateString(),
             'locked'         => true,
         ]);
 
@@ -124,10 +123,14 @@ class PlanningController extends Controller
                 'old_counter' => $oldCounter,
                 'new_counter' => $newCounter,
                 'consume'     => $consume,
-                'plan_date'   => $row['plan_date'] ?? date('Y-m-d'),
+                'plan_date'   => !empty($row['plan_date']) ? $row['plan_date'] : date('Y-m-d'),
             ]);
 
             $created++;
+        }
+
+        if ($created === 0) {
+            return back()->with('warning', 'لم يتم إنشاء أي سطر: اختر الفلاح والعداد في سطر واحد على الأقل.');
         }
 
         return redirect()->route('consommation.index')

@@ -23,19 +23,19 @@ class DashboardController extends Controller
         $activeClients = ClientActivation::where('year', $year)->count();
 
         $totalPaiements = Solde::where('type', 'credit')
-            ->whereYear('date_transfert', $year)
+            ->whereYear('plan_date', $year)
             ->sum('amount');
 
         $price = PrixM3::where('year', $year)->value('price') ?? 0;
 
         $totalConsoM3 = Solde::where('type', 'debit')
-            ->whereYear('date_transfert', $year)
+            ->whereYear('plan_date', $year)
             ->sum('consume');
 
         $totalConsoVal = round($totalConsoM3 * $price, 2);
 
         $recentSoldes = Solde::with('client')
-            ->whereYear('date_transfert', $year)
+            ->whereYear('plan_date', $year)
             ->orderByDesc('id')
             ->limit(10)
             ->get();

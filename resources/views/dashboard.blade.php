@@ -143,7 +143,7 @@
                             —
                         @endif
                     </td>
-                    <td class="text-muted">{{ $solde->date_transfert?->format('Y-m-d') ?? '—' }}</td>
+                    <td class="text-muted">{{ $solde->plan_date?->format('Y-m-d') ?? '—' }}</td>
                 </tr>
                 @empty
                 <tr><td colspan="5" class="text-center text-muted py-3">لا توجد عمليات لسنة {{ $year }}</td></tr>

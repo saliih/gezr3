@@ -27,16 +27,16 @@ class SoldeController extends Controller
             $query->where('client_id', $request->input('client_id'));
         }
         if ($request->filled('date_from')) {
-            $query->whereDate('date_transfert', '>=', $request->input('date_from'));
+            $query->whereDate('plan_date', '>=', $request->input('date_from'));
         }
         if ($request->filled('date_to')) {
-            $query->whereDate('date_transfert', '<=', $request->input('date_to'));
+            $query->whereDate('plan_date', '<=', $request->input('date_to'));
         }
         if ($request->filled('locked')) {
             $query->where('locked', $request->input('locked') === '1');
         }
         if ($type === 'activate' && $request->filled('year')) {
-            $query->whereYear('date_transfert', $request->input('year'));
+            $query->whereYear('plan_date', $request->input('year'));
         }
 
         $soldes = $query->orderByDesc('id')->paginate(25)->withQueryString();
@@ -72,8 +72,8 @@ class SoldeController extends Controller
         // Remaining balance = reminder of last credit solde of current year for this client
         $lastCredit = Solde::where('client_id', $clientId)
             ->where('type', 'credit')
-            ->whereYear('date_transfert', $year)
-            ->orderByDesc('date_transfert')
+            ->whereYear('plan_date', $year)
+            ->orderByDesc('plan_date')
             ->orderByDesc('id')
             ->first();
 
@@ -104,7 +104,7 @@ class SoldeController extends Controller
     {
         $data = $request->validate([
             'client_id'         => 'required|exists:client,id',
-            'date_transfert'    => 'required|date',
+            'plan_date'         => 'required|date',
             'transfert_number'  => 'nullable|string|max:50',
             'coupon_number'     => 'nullable|string|max:10',
             'vanne_amount'      => 'required|array|min:1',
@@ -114,7 +114,7 @@ class SoldeController extends Controller
         $year     = (int) date('Y');
         $prevYear = $year - 1;
         $clientId = (int) $data['client_id'];
-        $date     = Carbon::parse($data['date_transfert']);
+        $date     = Carbon::parse($data['plan_date']);
 
         $client         = Client::findOrFail($clientId);
         $clientVanneIds = $client->vannes()->pluck('vannes.id')->all();
@@ -131,8 +131,8 @@ class SoldeController extends Controller
         // Remaining balance = reminder of last credit solde of current year for this client
         $lastCredit = Solde::where('client_id', $clientId)
             ->where('type', 'credit')
-            ->whereYear('date_transfert', $year)
-            ->orderByDesc('date_transfert')
+            ->whereYear('plan_date', $year)
+            ->orderByDesc('plan_date')
             ->orderByDesc('id')
             ->first();
 
@@ -149,7 +149,7 @@ class SoldeController extends Controller
         if ($remaining > 0) {
             Solde::create([
                 'client_id'        => $clientId,
-                'date_transfert'   => Carbon::create($prevYear, 12, 31),
+                'plan_date'        => Carbon::create($prevYear, 12, 31),
                 'type'             => 'credit',
                 'amount'           => $settlementAmount,
                 'transfert_number' => $data['transfert_number'] ?? null,
@@ -165,7 +165,7 @@ class SoldeController extends Controller
             Solde::create([
                 'client_id'        => $clientId,
                 'vannes_id'        => $vanneId,
-                'date_transfert'   => $date,
+                'plan_date'        => $date,
                 'type'             => 'credit',
                 'amount'           => $vanneAmount,
                 'transfert_number' => $data['transfert_number'] ?? null,
@@ -182,7 +182,7 @@ class SoldeController extends Controller
     {
         $rules = [
             'client_id'        => 'required|exists:client,id',
-            'date_transfert'   => 'nullable|date',
+            'plan_date'        => 'nullable|date',
             'transfert_number' => 'nullable|string|max:50',
             'coupon_number'    => 'nullable|string|max:10',
         ];
@@ -194,11 +194,11 @@ class SoldeController extends Controller
             $rules['vannes_id']   = 'nullable|exists:vannes,id';
             $rules['old_counter'] = 'nullable|integer';
             $rules['new_counter'] = 'nullable|integer|gte:old_counter';
-            $rules['plan_date']   = 'nullable|date';
         }
 
         $data = $request->validate($rules);
         $data['type'] = $type;
+        $data['plan_date'] = $data['plan_date'] ?? date('Y-m-d');
 
         if ($type === 'debit') {
             $old = (int) ($data['old_counter'] ?? 0);
@@ -227,7 +227,7 @@ class SoldeController extends Controller
         $type  = $solde->type;
         $rules = [
             'client_id'        => 'required|exists:client,id',
-            'date_transfert'   => 'nullable|date',
+            'plan_date'        => 'nullable|date',
             'transfert_number' => 'nullable|string|max:50',
             'coupon_number'    => 'nullable|string|max:10',
             'locked'           => 'nullable|boolean',
@@ -240,11 +240,11 @@ class SoldeController extends Controller
             $rules['vannes_id']   = 'nullable|exists:vannes,id';
             $rules['old_counter'] = 'nullable|integer';
             $rules['new_counter'] = 'nullable|integer';
-            $rules['plan_date']   = 'nullable|date';
         }
 
         $data = $request->validate($rules);
         $data['locked'] = $request->boolean('locked');
+        $data['plan_date'] = $data['plan_date'] ?? $solde->plan_date?->format('Y-m-d') ?? date('Y-m-d');
 
         if ($type === 'debit') {
             $old = (int) ($data['old_counter'] ?? 0);

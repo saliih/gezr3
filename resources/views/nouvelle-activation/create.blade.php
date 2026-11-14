@@ -39,8 +39,8 @@
             {{-- Date --}}
             <div class="col-md-4">
                 <label class="form-label fw-semibold">تاريخ العملية</label>
-                <input type="date" name="date_transfert" class="form-control"
-                       value="{{ old('date_transfert', date('Y-m-d')) }}">
+                <input type="date" name="plan_date" class="form-control"
+                       value="{{ old('plan_date', date('Y-m-d')) }}">
             </div>
 
             {{-- Transfer / coupon --}}

@@ -14,7 +14,6 @@
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>اسم المستخدم</th>
                     <th>الصلاحيات</th>
                     <th></th>
@@ -23,7 +22,6 @@
             <tbody>
                 @forelse($users as $user)
                 <tr>
-                    <td class="text-muted">{{ $user->id }}</td>
                     <td class="fw-semibold">{{ $user->username }}</td>
                     <td>
                         @foreach($user->roles ?? [] as $role)
@@ -48,7 +46,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="4" class="text-center text-muted py-3">لا يوجد مستخدمون</td></tr>
+                <tr><td colspan="3" class="text-center text-muted py-3">لا يوجد مستخدمون</td></tr>
                 @endforelse
             </tbody>
         </table>
