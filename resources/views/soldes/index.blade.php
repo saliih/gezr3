@@ -19,6 +19,15 @@
     </div>
     <div class="card-body pb-0">
         <form method="GET" class="row g-2 mb-3">
+            @if($type === 'debit')
+            <div class="col-sm-2">
+                <select name="year" class="form-select form-select-sm no-select2" onchange="this.form.submit()" title="السنة">
+                    @foreach($availableYears as $y)
+                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
             <div class="col-sm-4">
                 <select name="client_id" class="form-select form-select-sm">
                     <option value="">كل الفلاحين</option>
@@ -49,7 +58,7 @@
             @endif
             <div class="col-auto">
                 <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
-                @if(request()->anyFilled(['client_id','date_from','date_to','locked','year']))
+                @if(request()->anyFilled(['client_id','date_from','date_to','locked']) || ($type === 'debit' ? $year !== $currentYear : request()->filled('year')))
                     <a href="{{ route($config['prefix'] . '.index') }}" class="btn btn-sm btn-outline-danger ms-1"><i class="bi bi-x"></i></a>
                 @endif
             </div>

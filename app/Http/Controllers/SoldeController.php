@@ -39,6 +39,21 @@ class SoldeController extends Controller
             $query->whereYear('plan_date', $request->input('year'));
         }
 
+        // Consommation : filtre par année (plan_date), année courante par défaut
+        $currentYear    = (int) date('Y');
+        $year           = $currentYear;
+        $availableYears = collect();
+        if ($type === 'debit') {
+            $year = $request->integer('year') ?: $currentYear;
+            $query->whereYear('plan_date', $year);
+
+            $availableYears = PrixM3::pluck('year')
+                ->merge(Solde::where('type', 'debit')->whereNotNull('plan_date')
+                    ->selectRaw('YEAR(plan_date) as y')->distinct()->pluck('y'))
+                ->push($currentYear, $year)
+                ->map(fn($y) => (int) $y)->unique()->sortDesc()->values();
+        }
+
         // Consommation : date (plan_date) croissante ; les autres types restent par date décroissante
         if ($type === 'debit') {
             $query->orderBy('plan_date')->orderBy('id');
@@ -50,7 +65,7 @@ class SoldeController extends Controller
         $clients = Client::orderBy('name')->get(['id', 'name', 'num_dossier']);
         $config  = $this->typeConfig[$type];
 
-        return view('soldes.index', compact('soldes', 'clients', 'type', 'config'));
+        return view('soldes.index', compact('soldes', 'clients', 'type', 'config', 'year', 'currentYear', 'availableYears'));
     }
 
     public function create(Request $request, string $type = 'credit')
