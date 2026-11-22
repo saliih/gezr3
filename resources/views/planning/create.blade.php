@@ -86,7 +86,7 @@
                     <th class="text-end" dir="ltr" style="width:120px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
                     <th class="text-end" dir="ltr" style="width:110px">الرصيد</th>
-                    <th style="min-width:220px">ملاحظة</th>
+                    <th style="min-width:260px">ملاحظة</th>
                     <th style="width:90px"></th>
                 </tr>
             </thead>
@@ -121,8 +121,8 @@
                         <input type="text" class="form-control form-control-sm text-end p-reminder bg-light" dir="ltr" readonly placeholder="—">
                     </td>
                     <td>
-                        <input type="text" class="form-control form-control-sm p-comment" maxlength="1000"
-                               value="{{ $s->comment }}" placeholder="ماذا حدث مع الفلاح؟">
+                        <textarea class="form-control form-control-sm p-comment" rows="2" maxlength="1000"
+                                  placeholder="ماذا حدث مع الفلاح؟">{{ $s->comment }}</textarea>
                     </td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm btn-success btn-save-releve" title="حفظ">
