@@ -20,7 +20,7 @@ class PlanningController extends Controller
             ->where('type', 'debit')
             ->whereNotNull('plan_date')
             ->where(fn($q) => $q->whereNull('new_counter')->orWhere('new_counter', 0))
-            ->orderByDesc('plan_date')
+            ->orderBy('plan_date')
             ->orderBy('vannes_id')
             ->get();
 

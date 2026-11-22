@@ -39,9 +39,9 @@ class SoldeController extends Controller
             $query->whereYear('plan_date', $request->input('year'));
         }
 
-        // Consommation : tri croissant sur la colonne « الاستهلاك » ; les autres types restent par date décroissante
+        // Consommation : date (plan_date) croissante ; les autres types restent par date décroissante
         if ($type === 'debit') {
-            $query->orderBy('consume')->orderByDesc('plan_date')->orderByDesc('id');
+            $query->orderBy('plan_date')->orderBy('id');
         } else {
             $query->orderByDesc('plan_date')->orderByDesc('id');
         }
