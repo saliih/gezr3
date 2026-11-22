@@ -39,7 +39,14 @@ class SoldeController extends Controller
             $query->whereYear('plan_date', $request->input('year'));
         }
 
-        $soldes = $query->orderByDesc('plan_date')->orderByDesc('id')->paginate(25)->withQueryString();
+        // Consommation : tri croissant sur la colonne « الاستهلاك » ; les autres types restent par date décroissante
+        if ($type === 'debit') {
+            $query->orderBy('consume')->orderByDesc('plan_date')->orderByDesc('id');
+        } else {
+            $query->orderByDesc('plan_date')->orderByDesc('id');
+        }
+
+        $soldes = $query->paginate(25)->withQueryString();
         $clients = Client::orderBy('name')->get(['id', 'name', 'num_dossier']);
         $config  = $this->typeConfig[$type];
 
@@ -178,6 +185,21 @@ class SoldeController extends Controller
             ->with('success', 'تم إضافة الدفعة بنجاح.');
     }
 
+    /** Même fellah + même compteur + même jour déjà enregistré en consommation ? */
+    private function debitDuplicateExists(array $data, ?int $ignoreId = null): bool
+    {
+        if (empty($data['client_id']) || empty($data['vannes_id'])) {
+            return false;
+        }
+
+        return Solde::where('type', 'debit')
+            ->where('client_id', $data['client_id'])
+            ->where('vannes_id', $data['vannes_id'])
+            ->whereDate('plan_date', $data['plan_date'])
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->exists();
+    }
+
     public function store(Request $request, string $type = 'credit')
     {
         $rules = [
@@ -203,6 +225,10 @@ class SoldeController extends Controller
         $data['plan_date'] = $data['plan_date'] ?? date('Y-m-d');
 
         if ($type === 'debit') {
+            if ($this->debitDuplicateExists($data)) {
+                return back()->withInput()->withErrors(['vannes_id' => 'هذا الفلاح مسجّل مسبقاً على نفس العداد في نفس اليوم.']);
+            }
+
             $old = (int) ($data['old_counter'] ?? 0);
             $new = (int) ($data['new_counter'] ?? 0);
             $data['consume'] = max(0, $new - $old);
@@ -251,6 +277,10 @@ class SoldeController extends Controller
         $data['plan_date'] = $data['plan_date'] ?? $solde->plan_date?->format('Y-m-d') ?? date('Y-m-d');
 
         if ($type === 'debit') {
+            if ($this->debitDuplicateExists($data, $solde->id)) {
+                return back()->withInput()->withErrors(['vannes_id' => 'هذا الفلاح مسجّل مسبقاً على نفس العداد في نفس اليوم.']);
+            }
+
             $old = (int) ($data['old_counter'] ?? 0);
             $new = (int) ($data['new_counter'] ?? 0);
             $data['consume'] = max(0, $new - $old);
