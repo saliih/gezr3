@@ -39,7 +39,7 @@ class SoldeController extends Controller
             $query->whereYear('plan_date', $request->input('year'));
         }
 
-        $soldes = $query->orderByDesc('id')->paginate(25)->withQueryString();
+        $soldes = $query->orderByDesc('plan_date')->orderByDesc('id')->paginate(25)->withQueryString();
         $clients = Client::orderBy('name')->get(['id', 'name', 'num_dossier']);
         $config  = $this->typeConfig[$type];
 

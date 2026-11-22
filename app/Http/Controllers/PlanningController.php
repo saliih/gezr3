@@ -20,9 +20,23 @@ class PlanningController extends Controller
             ->where('type', 'debit')
             ->whereNotNull('plan_date')
             ->where(fn($q) => $q->whereNull('new_counter')->orWhere('new_counter', 0))
-            ->orderBy('plan_date')
+            ->orderByDesc('plan_date')
             ->orderBy('vannes_id')
             ->get();
+
+        // auto_number du relevé précédent du même compteur (dernier relevé saisi avant celui-ci)
+        $recorded = Solde::where('type', 'debit')
+            ->whereIn('vannes_id', $pending->pluck('vannes_id')->filter()->unique())
+            ->where('new_counter', '>', 0)
+            ->orderBy('id')
+            ->get(['id', 'vannes_id', 'auto_number'])
+            ->groupBy('vannes_id');
+
+        foreach ($pending as $s) {
+            $s->prev_auto_number = $recorded->get($s->vannes_id)
+                ?->where('id', '<', $s->id)
+                ->last()?->auto_number;
+        }
 
         // Attach prev_reminder for each pending solde
         foreach ($pending as $s) {

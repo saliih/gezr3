@@ -9,6 +9,7 @@ use App\Http\Controllers\ParamsController;
 use App\Http\Controllers\PrixM3Controller;
 use App\Http\Controllers\RapportController;
 use App\Http\Controllers\SoldeController;
+use App\Http\Controllers\SoldeHistoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VannesController;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,9 @@ Route::middleware('auth')->group(function () {
 
     // Rapport
     Route::get('rapport/statistiques', [RapportController::class, 'statistiques'])->name('rapport.statistiques');
+
+    // Historique des soldes (super admin uniquement, contrôlé dans le contrôleur)
+    Route::get('historique', [SoldeHistoryController::class, 'index'])->name('historique.index');
 
     // Users (admin only)
     Route::resource('users', UserController::class);

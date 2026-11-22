@@ -82,6 +82,7 @@
                     <th>الفلاح</th>
                     <th>العداد</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد القديم</th>
+                    <th class="text-end" dir="ltr" style="width:120px">العداد القديم</th>
                     <th class="text-end" dir="ltr" style="width:120px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
                     <th class="text-end" dir="ltr" style="width:110px">الرصيد</th>
@@ -102,6 +103,7 @@
                         @endif
                     </td>
                     <td class="fw-semibold">{{ $s->vannes ?? '—' }}</td>
+                    <td class="text-end text-muted" dir="ltr">{{ $s->prev_auto_number ?? '—' }}</td>
                     <td>
                         <input type="number" class="form-control form-control-sm text-end p-old-counter" dir="ltr"
                                value="{{ $s->old_counter ?? 0 }}" min="0">

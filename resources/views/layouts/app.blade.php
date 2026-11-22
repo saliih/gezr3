@@ -267,6 +267,11 @@
         <a href="{{ route('params.edit') }}" class="nav-link {{ request()->routeIs('params.*') ? 'active' : '' }}">
             <i class="bi bi-sliders"></i> المعاملات
         </a>
+        @if(auth()->user()->isSuperAdmin())
+        <a href="{{ route('historique.index') }}" class="nav-link {{ request()->routeIs('historique.*') ? 'active' : '' }}">
+            <i class="bi bi-clock-history"></i> سجل العمليات
+        </a>
+        @endif
         @if(auth()->user()->isAdmin())
         <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
             <i class="bi bi-person-gear"></i> المستخدمون
