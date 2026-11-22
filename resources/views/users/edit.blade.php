@@ -3,7 +3,7 @@
 @section('page-title', 'تعديل: ' . $user->username)
 
 @section('content')
-<div class="card" style="max-width:500px">
+<div class="card" style="max-width:820px">
     <div class="card-header">
         <h5><i class="bi bi-pencil me-2"></i>{{ $user->username }}</h5>
         <a href="{{ route('users.index') }}" class="btn btn-sm btn-outline-secondary">

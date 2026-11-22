@@ -8,9 +8,11 @@
         <div class="card mb-3">
             <div class="card-header">
                 <h5><i class="bi bi-tools me-2"></i>معلومات العداد</h5>
+                @if(auth()->user()->canDo('vannes', 'edit'))
                 <a href="{{ route('vannes.edit', $vanne) }}" class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-pencil"></i>
                 </a>
+                @endif
             </div>
             <div class="card-body">
                 <dl class="row mb-0">

@@ -12,13 +12,44 @@ class User extends Model implements AuthenticatableContract
 
     protected $table = 'user';
     public $timestamps = false;
-    protected $fillable = ['username', 'password', 'roles'];
+    protected $fillable = ['username', 'password', 'roles', 'permissions'];
 
     protected $hidden = ['password'];
 
     protected $casts = [
-        'roles' => 'array',
+        'roles'       => 'array',
+        'permissions' => 'array',
     ];
+
+    /**
+     * Droit sur un module/action. Les admins ont tout. Un utilisateur sans réglage
+     * enregistré (permissions NULL, anciens comptes) garde l'accès complet d'avant.
+     */
+    public function canDo(string $module, string $action = 'view'): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        $perms = $this->permissions;
+        if ($perms === null) {
+            return array_key_exists($module, \App\Support\Permissions::modules());
+        }
+
+        return in_array($action, $perms[$module] ?? [], true);
+    }
+
+    /** Première page autorisée (pour la redirection après connexion). */
+    public function firstAllowedRoute(): ?string
+    {
+        foreach (\App\Support\Permissions::modules() as $module => $def) {
+            // L'action d'entrée d'un module est sa première (عرض, ou إضافة pour « تفعيل جديد »)
+            if ($this->canDo($module, array_key_first($def['actions']))) {
+                return $def['route'];
+            }
+        }
+        return null;
+    }
 
     public function isAdmin(): bool
     {

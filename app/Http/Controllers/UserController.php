@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Support\Permissions;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class UserController extends Controller
 {
@@ -27,11 +29,16 @@ class UserController extends Controller
             'roles'    => 'nullable|array',
         ]);
 
-        User::create([
+        $attrs = [
             'username' => $data['username'],
             'password' => Hash::make($data['password']),
             'roles'    => $data['roles'] ?? ['ROLE_USER'],
-        ]);
+        ];
+        if (Schema::hasColumn('user', 'permissions')) {
+            $attrs['permissions'] = Permissions::sanitize($request->input('permissions'));
+        }
+
+        User::create($attrs);
 
         return redirect()->route('users.index')
             ->with('success', 'تم إضافة المستخدم بنجاح.');
@@ -57,6 +64,10 @@ class UserController extends Controller
 
         $user->username = $data['username'];
         $user->roles    = $data['roles'] ?? ['ROLE_USER'];
+
+        if (Schema::hasColumn('user', 'permissions')) {
+            $user->permissions = Permissions::sanitize($request->input('permissions'));
+        }
 
         if ($request->filled('password')) {
             $user->password = Hash::make($data['password']);

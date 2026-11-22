@@ -19,6 +19,7 @@
 
         <form method="POST" action="{{ route('params.update', $params->id ?? 1) }}">
             @csrf @method('PUT')
+            <fieldset {{ auth()->user()->canDo('params', 'edit') ? '' : 'disabled' }}>
             <div class="mb-3">
                 <label class="form-label fw-semibold">سعر الوحدة</label>
                 <div class="input-group">
@@ -35,6 +36,7 @@
             <button type="submit" class="btn btn-primary w-100">
                 <i class="bi bi-save me-1"></i> حفظ الإعدادات
             </button>
+            </fieldset>
         </form>
     </div>
 </div>

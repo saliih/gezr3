@@ -6,9 +6,11 @@
 <div class="card">
     <div class="card-header">
         <h5><i class="bi bi-people me-2"></i>قائمة الفلاحين <span class="badge bg-secondary">{{ $clients->total() }}</span></h5>
+        @if(auth()->user()->canDo('clients', 'create'))
         <a href="{{ route('clients.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg me-1"></i> إضافة فلاح
         </a>
+        @endif
     </div>
     <div class="card-body pb-0">
         <form method="GET" class="row g-2 mb-3">
@@ -81,14 +83,18 @@
                     <td>{{ number_format($client->old_solde, 2) }}</td>
                     <td>
                         <div class="d-flex gap-1">
+                            @if(auth()->user()->canDo('clients', 'edit'))
                             <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
                             </a>
+                            @endif
+                            @if(auth()->user()->canDo('clients', 'delete'))
                             <form method="POST" action="{{ route('clients.destroy', $client) }}"
                                   onsubmit="return confirm('حذف الفلاح؟')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

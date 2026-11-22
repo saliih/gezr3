@@ -8,9 +8,11 @@
         <div class="card mb-3">
             <div class="card-header">
                 <h5><i class="bi bi-person me-2"></i>معلومات الفلاح</h5>
+                @if(auth()->user()->canDo('clients', 'edit'))
                 <a href="{{ route('clients.edit', $client) }}" class="btn btn-sm btn-outline-primary">
                     <i class="bi bi-pencil"></i>
                 </a>
+                @endif
             </div>
             <div class="card-body">
                 <dl class="row mb-0">
@@ -73,9 +75,11 @@
         <div class="card">
             <div class="card-header">
                 <h5><i class="bi bi-receipt me-2"></i>سجل العمليات</h5>
+                @if(auth()->user()->canDo('paiements', 'create'))
                 <a href="{{ route('paiements.create') }}?client_id={{ $client->id }}" class="btn btn-sm btn-outline-success">
                     <i class="bi bi-plus"></i> دفعة
                 </a>
+                @endif
             </div>
             <div class="card-body pb-0">
                 @if($soldesByYear->isEmpty())

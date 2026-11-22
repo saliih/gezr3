@@ -13,6 +13,14 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // Sans droit sur le tableau de bord : première page autorisée, sinon 403
+        $user = $request->user();
+        if (!$user->canDo('dashboard', 'view')) {
+            $route = $user->firstAllowedRoute();
+            abort_if(!$route || $route === 'dashboard', 403, 'ليست لديك صلاحية للدخول إلى أي صفحة.');
+            return redirect()->route($route);
+        }
+
         $currentYear = (int) date('Y');
         $year        = (int) ($request->input('year', $currentYear));
 

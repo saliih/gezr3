@@ -12,9 +12,11 @@
                 <i class="bi bi-printer me-1"></i> طباعة التخطيط
             </button>
             @endif
+            @if(auth()->user()->canDo($config['prefix'], 'create'))
             <a href="{{ route($config['prefix'] . '.create') }}" class="btn btn-primary btn-sm">
                 <i class="bi bi-plus-lg me-1"></i> إضافة
             </a>
+            @endif
         </div>
     </div>
     <div class="card-body pb-0">
@@ -121,14 +123,18 @@
                     <td class="small">{{ $solde->editor?->username ?? '—' }}</td>
                     <td>
                         <div class="d-flex gap-1">
+                            @if(auth()->user()->canDo($config['prefix'], 'edit'))
                             <a href="{{ route($config['prefix'] . '.edit', $solde) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
                             </a>
+                            @endif
+                            @if(auth()->user()->canDo($config['prefix'], 'delete'))
                             <form method="POST" action="{{ route($config['prefix'] . '.destroy', $solde) }}"
                                   onsubmit="return confirm('حذف هذه العملية؟')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

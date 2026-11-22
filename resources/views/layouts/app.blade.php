@@ -226,47 +226,81 @@
         GEZR
     </a>
 
+    @php
+        $u   = auth()->user();
+        $can = fn($module, $action = 'view') => $u->canDo($module, $action);
+    @endphp
     <div class="py-2">
+        @if($can('dashboard') || $can('rapport'))
         <div class="nav-section">الرئيسية</div>
+        @endif
+        @if($can('dashboard', 'view'))
         <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-grid-1x2"></i> لوحة التحكم
         </a>
+        @endif
+        @if($can('rapport', 'view'))
         <a href="{{ route('rapport.statistiques') }}" class="nav-link {{ request()->routeIs('rapport.*') ? 'active' : '' }}">
             <i class="bi bi-bar-chart-line"></i> الإحصائيات
         </a>
+        @endif
 
+        @if($can('clients') || $can('vannes'))
         <div class="nav-section">الإدارة</div>
+        @endif
+        @if($can('clients', 'view'))
         <a href="{{ route('clients.index') }}" class="nav-link {{ request()->routeIs('clients.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i> الفلاحين
         </a>
+        @endif
+        @if($can('vannes', 'view'))
         <a href="{{ route('vannes.index') }}" class="nav-link {{ request()->routeIs('vannes.*') ? 'active' : '' }}">
             <i class="bi bi-tools"></i> العدادات
         </a>
+        @endif
 
+        @if($can('paiements') || $can('consommation') || $can('planning') || $can('activations') || $can('nouvelle-activation', 'create'))
         <div class="nav-section">المعاملات</div>
+        @endif
+        @if($can('paiements', 'view'))
         <a href="{{ route('paiements.index') }}" class="nav-link {{ request()->routeIs('paiements.*') ? 'active' : '' }}">
             <i class="bi bi-cash-coin"></i> مداخيل
         </a>
+        @endif
+        @if($can('consommation', 'view'))
         <a href="{{ route('consommation.index') }}" class="nav-link {{ request()->routeIs('consommation.*') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i> الاستهلاك
         </a>
+        @endif
+        @if($can('planning', 'view'))
         <a href="{{ route('planning.create') }}" class="nav-link {{ request()->routeIs('planning.*') ? 'active' : '' }}">
             <i class="bi bi-calendar3"></i> تخطيط
         </a>
+        @endif
+        @if($can('activations', 'view'))
         <a href="{{ route('activations.index') }}" class="nav-link {{ request()->routeIs('activations.*') ? 'active' : '' }}">
             <i class="bi bi-toggle-on"></i> التفعيلات
         </a>
+        @endif
+        @if($can('nouvelle-activation', 'create'))
         <a href="{{ route('nouvelle-activation.create') }}" class="nav-link {{ request()->routeIs('nouvelle-activation.*') ? 'active' : '' }}">
             <i class="bi bi-plus-circle"></i> تفعيل جديد
         </a>
+        @endif
 
+        @if($can('prix-m3') || $can('params') || $u->isAdmin())
         <div class="nav-section">الإعدادات</div>
+        @endif
+        @if($can('prix-m3', 'view'))
         <a href="{{ route('prix-m3.index') }}" class="nav-link {{ request()->routeIs('prix-m3.*') ? 'active' : '' }}">
             <i class="bi bi-currency-dollar"></i> أسعار م³
         </a>
+        @endif
+        @if($can('params', 'view'))
         <a href="{{ route('params.edit') }}" class="nav-link {{ request()->routeIs('params.*') ? 'active' : '' }}">
             <i class="bi bi-sliders"></i> المعاملات
         </a>
+        @endif
         @if(auth()->user()->isAdmin())
         <a href="{{ route('historique.index') }}" class="nav-link {{ request()->routeIs('historique.*') ? 'active' : '' }}">
             <i class="bi bi-clock-history"></i> سجل العمليات

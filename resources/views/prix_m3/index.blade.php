@@ -6,9 +6,11 @@
 <div class="card" style="max-width:700px">
     <div class="card-header">
         <h5><i class="bi bi-currency-dollar me-2"></i>الأسعار السنوية</h5>
+        @if(auth()->user()->canDo('prix-m3', 'create'))
         <a href="{{ route('prix-m3.create') }}" class="btn btn-primary btn-sm">
             <i class="bi bi-plus-lg me-1"></i> إضافة سنة
         </a>
+        @endif
     </div>
     <div class="table-responsive">
         <table class="table table-hover mb-0">
@@ -28,14 +30,18 @@
                     <td>{{ $prix->activation_fee ? number_format($prix->activation_fee, 2) : '—' }}</td>
                     <td>
                         <div class="d-flex gap-1">
+                            @if(auth()->user()->canDo('prix-m3', 'edit'))
                             <a href="{{ route('prix-m3.edit', $prix) }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
                             </a>
+                            @endif
+                            @if(auth()->user()->canDo('prix-m3', 'delete'))
                             <form method="POST" action="{{ route('prix-m3.destroy', $prix) }}"
                                   onsubmit="return confirm('حذف السعر؟')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
                             </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

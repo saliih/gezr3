@@ -4,6 +4,12 @@
 
 @section('content')
 
+@php
+    $canCreatePlanning = auth()->user()->canDo('planning', 'create');
+    $canEditPlanning   = auth()->user()->canDo('planning', 'edit');
+@endphp
+
+@if($canCreatePlanning)
 <form method="POST" action="{{ route('planning.store') }}" id="planning-form">
 @csrf
 
@@ -57,6 +63,7 @@
 </div>
 
 </form>
+@endif
 
 {{-- Pending (planned but not yet recorded) --}}
 @if($pending->isNotEmpty())
@@ -107,11 +114,11 @@
                     <td class="fw-semibold">{{ $s->vannes ?? '—' }}</td>
                     <td class="text-end text-muted" dir="ltr">{{ $s->prev_auto_number ?? '—' }}</td>
                     <td>
-                        <input type="number" class="form-control form-control-sm text-end p-old-counter" dir="ltr"
+                        <input type="number" class="form-control form-control-sm text-end p-old-counter" dir="ltr" {{ $canEditPlanning ? '' : 'disabled' }}
                                value="{{ $s->old_counter ?? 0 }}" min="0">
                     </td>
                     <td>
-                        <input type="number" class="form-control form-control-sm text-end p-new-counter" dir="ltr"
+                        <input type="number" class="form-control form-control-sm text-end p-new-counter" dir="ltr" {{ $canEditPlanning ? '' : 'disabled' }}
                                min="0" placeholder="0">
                     </td>
                     <td>
@@ -121,16 +128,20 @@
                         <input type="text" class="form-control form-control-sm text-end p-reminder bg-light" dir="ltr" readonly placeholder="—">
                     </td>
                     <td>
-                        <textarea class="form-control form-control-sm p-comment" rows="2" maxlength="1000"
+                        <textarea class="form-control form-control-sm p-comment" rows="2" maxlength="1000" {{ $canEditPlanning ? '' : 'disabled' }}
                                   placeholder="ماذا حدث مع الفلاح؟">{{ $s->comment }}</textarea>
                     </td>
                     <td class="text-center">
+                        @if($canEditPlanning)
                         <button type="button" class="btn btn-sm btn-success btn-save-releve" title="حفظ">
                             <i class="bi bi-check-lg"></i>
                         </button>
+                        @endif
+                        @if(auth()->user()->canDo('consommation', 'edit'))
                         <a href="{{ route('consommation.edit', $s) }}" class="btn btn-sm btn-outline-secondary" title="تفاصيل">
                             <i class="bi bi-pencil"></i>
                         </a>
+                        @endif
                     </td>
                 </tr>
                 @endforeach
@@ -262,6 +273,7 @@ $(function () {
 
     // Nombre de lignes : ajoute/retire des lignes en fin de tableau (les valeurs saisies sont conservées)
     function syncRows(n) {
+        if (!$tbody.length) return;   // pas de droit « إضافة » : le formulaire n'est pas affiché
         while ($tbody.children().length < n) addRow();
         while ($tbody.children().length > n) $tbody.children().last().remove();
         renumber();
