@@ -74,6 +74,7 @@ class PlanningController extends Controller
         $data = $request->validate([
             'old_counter' => 'required|integer|min:0',
             'new_counter' => 'required|integer|min:0',
+            'comment'     => 'nullable|string|max:1000',
         ]);
 
         $old     = (int) $data['old_counter'];
@@ -98,14 +99,18 @@ class PlanningController extends Controller
             $solde->vannes->update(['last_value' => $new]);
         }
 
-        $solde->update([
+        $update = [
             'old_counter'    => $old,
             'new_counter'    => $new,
             'consume'        => $consume,
             'amount'         => $amount,
             'reminder'       => $reminder,
             'locked'         => true,
-        ]);
+        ];
+        if (Solde::hasCommentColumn() && array_key_exists('comment', $data)) {
+            $update['comment'] = $data['comment'];
+        }
+        $solde->update($update);
 
         return response()->json([
             'success'  => true,
@@ -158,6 +163,19 @@ class PlanningController extends Controller
         return response()->json([
             'conflicts' => $this->findConflicts($request->input('rows', [])),
         ]);
+    }
+
+    /** Commentaire libre sur un relevé planifié (ex. client absent), enregistrable sans saisir le compteur. */
+    public function updateComment(Request $request, Solde $solde)
+    {
+        if (!Solde::hasCommentColumn()) {
+            return response()->json(['message' => 'عمود الملاحظة غير موجود: نفّذ php artisan migrate --force'], 422);
+        }
+
+        $data = $request->validate(['comment' => 'nullable|string|max:1000']);
+        $solde->update(['comment' => $data['comment'] ?? null]);
+
+        return response()->json(['success' => true]);
     }
 
     public function store(Request $request)

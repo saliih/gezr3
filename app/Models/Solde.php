@@ -16,8 +16,15 @@ class Solde extends Model
     protected $fillable = [
         'client_id', 'vannes_id', 'transfert_number',
         'amount', 'old_counter', 'new_counter', 'consume', 'reminder',
-        'type', 'coupon_number', 'auto_number', 'plan_date', 'locked',
+        'type', 'coupon_number', 'auto_number', 'plan_date', 'locked', 'comment',
     ];
+
+    /** La colonne `comment` n'existe qu'après la migration. */
+    public static function hasCommentColumn(): bool
+    {
+        static $has = null;
+        return $has ??= \Illuminate\Support\Facades\Schema::hasColumn('solde', 'comment');
+    }
 
     /** Les colonnes d'audit n'existent qu'après la migration : on ne les écrit que si elles sont présentes. */
     private static function hasAuditColumns(): bool

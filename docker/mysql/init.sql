@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS `solde` (
     `auto_number`       INT DEFAULT NULL,
     `plan_date`         DATE DEFAULT NULL, -- unique date métier (opération / relevé)
     `locked`            TINYINT(1) DEFAULT NULL,
+    `comment`           TEXT DEFAULT NULL,
     `created_by`        INT DEFAULT NULL,
     `updated_by`        INT DEFAULT NULL,
     `created_at`        DATETIME DEFAULT NULL,

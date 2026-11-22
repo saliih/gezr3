@@ -194,10 +194,12 @@ class SoldeController extends Controller
             $rules['vannes_id']   = 'nullable|exists:vannes,id';
             $rules['old_counter'] = 'nullable|integer';
             $rules['new_counter'] = 'nullable|integer|gte:old_counter';
+            $rules['comment']     = 'nullable|string|max:1000';
         }
 
         $data = $request->validate($rules);
         $data['type'] = $type;
+        if (!Solde::hasCommentColumn()) unset($data['comment']);
         $data['plan_date'] = $data['plan_date'] ?? date('Y-m-d');
 
         if ($type === 'debit') {
@@ -240,10 +242,12 @@ class SoldeController extends Controller
             $rules['vannes_id']   = 'nullable|exists:vannes,id';
             $rules['old_counter'] = 'nullable|integer';
             $rules['new_counter'] = 'nullable|integer';
+            $rules['comment']     = 'nullable|string|max:1000';
         }
 
         $data = $request->validate($rules);
         $data['locked'] = $request->boolean('locked');
+        if (!Solde::hasCommentColumn()) unset($data['comment']);
         $data['plan_date'] = $data['plan_date'] ?? $solde->plan_date?->format('Y-m-d') ?? date('Y-m-d');
 
         if ($type === 'debit') {

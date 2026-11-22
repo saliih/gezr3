@@ -83,6 +83,11 @@
             <input type="number" id="consume_display" class="form-control" readonly
                    value="{{ old('new_counter', $solde?->new_counter ?? 0) - old('old_counter', $solde?->old_counter ?? 0) }}">
         </div>
+        <div class="col-12">
+            <label class="form-label fw-semibold">ملاحظة</label>
+            <textarea name="comment" rows="2" maxlength="1000" class="form-control"
+                      placeholder="ماذا حدث مع الفلاح؟">{{ old('comment', $solde?->comment) }}</textarea>
+        </div>
         @endif
 
         @if($type === 'activate')

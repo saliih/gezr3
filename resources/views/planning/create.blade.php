@@ -86,6 +86,7 @@
                     <th class="text-end" dir="ltr" style="width:120px">العداد الجديد</th>
                     <th class="text-end" dir="ltr" style="width:110px">الاستهلاك</th>
                     <th class="text-end" dir="ltr" style="width:110px">الرصيد</th>
+                    <th style="min-width:220px">ملاحظة</th>
                     <th style="width:90px"></th>
                 </tr>
             </thead>
@@ -93,6 +94,7 @@
                 @foreach($pending as $s)
                 <tr id="pending-row-{{ $s->id }}"
                     data-url="{{ route('planning.releve', $s) }}"
+                    data-comment-url="{{ route('planning.comment', $s) }}"
                     data-prev-reminder="{{ $s->prev_reminder }}"
                     data-date="{{ $s->plan_date?->format('Y-m-d') }}">
                     <td>{{ $s->plan_date?->format('d/m/Y') ?? '—' }}</td>
@@ -117,6 +119,10 @@
                     </td>
                     <td>
                         <input type="text" class="form-control form-control-sm text-end p-reminder bg-light" dir="ltr" readonly placeholder="—">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm p-comment" maxlength="1000"
+                               value="{{ $s->comment }}" placeholder="ماذا حدث مع الفلاح؟">
                     </td>
                     <td class="text-center">
                         <button type="button" class="btn btn-sm btn-success btn-save-releve" title="حفظ">
@@ -373,6 +379,22 @@ $(function () {
         recalcPendingRow($(this).closest('tr'));
     });
 
+    // Commentaire : enregistré dès qu'on quitte le champ (sans avoir à saisir le compteur)
+    $(document).on('change', '.p-comment', function () {
+        var $inp = $(this);
+        var $tr  = $inp.closest('tr');
+        $inp.removeClass('is-valid is-invalid');
+        $.post({
+            url: $tr.data('comment-url'),
+            data: { _token: $('meta[name="csrf-token"]').attr('content'), comment: $inp.val() },
+            success: function () { $inp.addClass('is-valid'); setTimeout(function () { $inp.removeClass('is-valid'); }, 1500); },
+            error: function (xhr) {
+                $inp.addClass('is-invalid');
+                alert(xhr.responseJSON?.message || 'خطأ في حفظ الملاحظة');
+            }
+        });
+    });
+
     // Save releve via AJAX
     $(document).on('click', '.btn-save-releve', function () {
         var $btn = $(this).prop('disabled', true).html('<span class="spinner-border spinner-border-sm"></span>');
@@ -387,6 +409,7 @@ $(function () {
                 _token:      $('meta[name="csrf-token"]').attr('content'),
                 old_counter: old,
                 new_counter: nw || 0,
+                comment:     $tr.find('.p-comment').val(),
             },
             success: function (res) {
                 $tr.addClass('table-success');

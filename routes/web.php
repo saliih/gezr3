@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::post('planning/check', [PlanningController::class, 'check'])->name('planning.check');
     Route::post('planning', [PlanningController::class, 'store'])->name('planning.store');
     Route::post('planning/{solde}/releve', [PlanningController::class, 'updateReleve'])->name('planning.releve');
+    Route::post('planning/{solde}/comment', [PlanningController::class, 'updateComment'])->name('planning.comment');
 
     // Nouvelle Activation
     Route::get('nouvelle-activation', [NouvelleActivationController::class, 'create'])->name('nouvelle-activation.create');

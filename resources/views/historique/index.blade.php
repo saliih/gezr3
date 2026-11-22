@@ -13,7 +13,7 @@
         'client_id' => 'الفلاح (معرّف)', 'vannes_id' => 'العداد (معرّف)', 'plan_date' => 'التاريخ',
         'transfert_number' => 'رقم التحويل', 'amount' => 'المبلغ', 'old_counter' => 'العداد القديم',
         'new_counter' => 'العداد الجديد', 'consume' => 'الاستهلاك', 'reminder' => 'البقية',
-        'type' => 'النوع', 'coupon_number' => 'رقم القسيمة', 'auto_number' => 'رقم تلقائي', 'locked' => 'مقفل',
+        'type' => 'النوع', 'coupon_number' => 'رقم القسيمة', 'auto_number' => 'رقم تلقائي', 'locked' => 'مقفل', 'comment' => 'ملاحظة',
     ];
     $fmt = fn($v) => ($v === null || $v === '') ? '—' : (is_scalar($v) ? $v : json_encode($v));
 @endphp

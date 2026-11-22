@@ -67,6 +67,7 @@
                     @if($type === 'debit') <th>القديم</th><th>الجديد</th><th>الاستهلاك</th> @endif
                     <th>البقية</th>
                     <th>رقم التحويل</th>
+                    @if($type === 'debit') <th>ملاحظة</th> @endif
                     <th>مقفل</th>
                     <th>أنشأه</th>
                     <th>آخر تعديل</th>
@@ -99,6 +100,9 @@
                     @endif
                     <td dir="ltr" style="text-align:end">{{ number_format($solde->reminder ?? 0, 2) }} م²</td>
                     <td>{{ $solde->transfert_number ?? '—' }}</td>
+                    @if($type === 'debit')
+                    <td class="small" style="max-width:240px">{{ $solde->comment ?? '—' }}</td>
+                    @endif
                     <td>
                         @if($solde->locked)
                             <i class="bi bi-lock-fill text-warning"></i>
@@ -120,7 +124,7 @@
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="14" class="text-center text-muted py-4">لا توجد عمليات</td></tr>
+                <tr><td colspan="15" class="text-center text-muted py-4">لا توجد عمليات</td></tr>
                 @endforelse
             </tbody>
         </table>
