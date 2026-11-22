@@ -267,7 +267,7 @@
         <a href="{{ route('params.edit') }}" class="nav-link {{ request()->routeIs('params.*') ? 'active' : '' }}">
             <i class="bi bi-sliders"></i> المعاملات
         </a>
-        @if(auth()->user()->isSuperAdmin())
+        @if(auth()->user()->isAdmin())
         <a href="{{ route('historique.index') }}" class="nav-link {{ request()->routeIs('historique.*') ? 'active' : '' }}">
             <i class="bi bi-clock-history"></i> سجل العمليات
         </a>

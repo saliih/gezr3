@@ -10,7 +10,7 @@ class SoldeHistoryController extends Controller
 {
     public function index(Request $request)
     {
-        abort_unless(auth()->user()?->isSuperAdmin(), 403);
+        abort_unless(auth()->user()?->isAdmin(), 403);
 
         if (!Schema::hasTable('solde_history')) {
             return view('historique.index', [
